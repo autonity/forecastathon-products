@@ -1,0 +1,24 @@
+CLAUDE.md
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keyfiles - prevent accidental commits
+*.key
+*.keystore
+*.pem
