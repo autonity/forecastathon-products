@@ -19,6 +19,7 @@ import os
 import sys
 
 import afp
+from afp.exceptions import IPFSError, NotFoundError, ValidationError
 
 
 def main():
@@ -62,16 +63,49 @@ def main():
         print("Validation successful")
         sys.exit(0)
 
+    except ValidationError as e:
+        print(f"Error: Extended metadata schema validation failed.", file=sys.stderr)
+        print(f"Details: {e}", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("The product exists on-chain but its extended metadata is invalid.", file=sys.stderr)
+        print("Please verify:", file=sys.stderr)
+        print("  1. The extended metadata conforms to the expected schema", file=sys.stderr)
+        print("  2. All required fields are present and have correct types", file=sys.stderr)
+        print("  3. The schema CID matches a supported schema version", file=sys.stderr)
+        sys.exit(1)
+
+    except IPFSError as e:
+        print(f"Error: Failed to fetch extended metadata from IPFS.", file=sys.stderr)
+        print(f"Details: {e}", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("The product exists on-chain but its extended metadata could not be retrieved.", file=sys.stderr)
+        print("Please verify:", file=sys.stderr)
+        print("  1. The extended metadata CID is correct and pinned to IPFS", file=sys.stderr)
+        print("  2. The IPFS gateway is accessible", file=sys.stderr)
+        sys.exit(1)
+
+    except NotFoundError as e:
+        print(f"Error: Product '{product_id}' not found.", file=sys.stderr)
+        print(f"Details: {e}", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("Please verify:", file=sys.stderr)
+        print("  1. The product_id is correct (should be 0x followed by 64 hex characters)", file=sys.stderr)
+        print("  2. The product has been registered on the AFP contract", file=sys.stderr)
+        print("  3. You are submitting to the correct environment (bakerloo vs mainnet)", file=sys.stderr)
+        sys.exit(1)
+
     except Exception as e:
         error_msg = str(e)
         if "Contract call reverted" in error_msg or "Invalid type" in error_msg:
             print(f"Error: Product '{product_id}' does not exist on-chain.", file=sys.stderr)
+            print("", file=sys.stderr)
             print("Please verify:", file=sys.stderr)
             print("  1. The product_id is correct (should be 0x followed by 64 hex characters)", file=sys.stderr)
             print("  2. The product has been registered on the AFP contract", file=sys.stderr)
             print("  3. You are submitting to the correct environment (bakerloo vs mainnet)", file=sys.stderr)
         else:
-            print(f"Error: Product validation failed - {e}", file=sys.stderr)
+            print(f"Error: Product validation failed.", file=sys.stderr)
+            print(f"Details: {e}", file=sys.stderr)
         sys.exit(1)
 
 
