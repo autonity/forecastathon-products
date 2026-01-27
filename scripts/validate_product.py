@@ -7,6 +7,7 @@ Usage:
 
 Environment variables required:
     AUTONITY_RPC_URL: The RPC URL for the network
+    EXCHANGE_URL: The exchange server URL
     VALIDATION_PRIVATE_KEY: Private key for read-only validation
 
 Exit codes:
@@ -29,10 +30,15 @@ def main():
 
     # Get configuration from environment
     rpc_url = os.environ.get("AUTONITY_RPC_URL")
+    exchange_url = os.environ.get("EXCHANGE_URL")
     private_key = os.environ.get("VALIDATION_PRIVATE_KEY")
 
     if not rpc_url:
         print("Error: AUTONITY_RPC_URL environment variable not set", file=sys.stderr)
+        sys.exit(1)
+
+    if not exchange_url:
+        print("Error: EXCHANGE_URL environment variable not set", file=sys.stderr)
         sys.exit(1)
 
     if not private_key:
@@ -41,11 +47,13 @@ def main():
 
     print(f"Validating product: {product_id}")
     print(f"RPC URL: {rpc_url}")
+    print(f"Exchange URL: {exchange_url}")
 
     try:
         app = afp.AFP(
             authenticator=afp.PrivateKeyAuthenticator(private_key),
             rpc_url=rpc_url,
+            exchange_url=exchange_url,
         )
         product = app.Product(product_id)
 
