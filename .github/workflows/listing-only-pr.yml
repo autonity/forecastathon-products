@@ -120,6 +120,8 @@ jobs:
           AUTONITY_RPC_URL: ${{ vars.AUTONITY_RPC_URL }}
           EXCHANGE_URL: ${{ vars.EXCHANGE_URL }}
           VALIDATION_PRIVATE_KEY: ${{ secrets.VALIDATION_PRIVATE_KEY }}
+          IPFS_API_URL: ${{ vars.IPFS_API_URL }}
+          IPFS_API_KEY: ${{ secrets.IPFS_API_KEY }}
         run: |
           echo "Validating products exist on-chain..."
 

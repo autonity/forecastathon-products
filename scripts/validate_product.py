@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validate that a product exists on-chain.
+Validate that a product exists on-chain and has valid extended metadata.
 
 Usage:
     python validate_product.py <product_id>
@@ -9,6 +9,10 @@ Environment variables required:
     AUTONITY_RPC_URL: The RPC URL for the network
     EXCHANGE_URL: The exchange server URL
     VALIDATION_PRIVATE_KEY: Private key for read-only validation
+    IPFS_API_URL: The IPFS API URL (e.g., https://api.filebase.io/v1/ipfs)
+
+Environment variables optional:
+    IPFS_API_KEY: The IPFS API key/token for authentication
 
 Exit codes:
     0: Product exists and is valid
@@ -33,6 +37,8 @@ def main():
     rpc_url = os.environ.get("AUTONITY_RPC_URL")
     exchange_url = os.environ.get("EXCHANGE_URL")
     private_key = os.environ.get("VALIDATION_PRIVATE_KEY")
+    ipfs_api_url = os.environ.get("IPFS_API_URL")
+    ipfs_api_key = os.environ.get("IPFS_API_KEY")
 
     if not rpc_url:
         print("Error: AUTONITY_RPC_URL environment variable not set", file=sys.stderr)
@@ -46,15 +52,22 @@ def main():
         print("Error: VALIDATION_PRIVATE_KEY environment variable not set", file=sys.stderr)
         sys.exit(1)
 
+    if not ipfs_api_url:
+        print("Error: IPFS_API_URL environment variable not set", file=sys.stderr)
+        sys.exit(1)
+
     print(f"Validating product: {product_id}")
     print(f"RPC URL: {rpc_url}")
     print(f"Exchange URL: {exchange_url}")
+    print(f"IPFS API URL: {ipfs_api_url}")
 
     try:
         app = afp.AFP(
             authenticator=afp.PrivateKeyAuthenticator(private_key),
             rpc_url=rpc_url,
             exchange_url=exchange_url,
+            ipfs_api_url=ipfs_api_url,
+            ipfs_api_key=ipfs_api_key,
         )
 
         product_api = app.Product()
