@@ -12,9 +12,9 @@ For a product to be listed on the Autex, it must satisfy the following requireme
 
 ### Required Contract Addresses
 
-| Field | Bakerloo | Mainnet |
-|-------|----------|---------|
-| `oracleAddress` | `0x72EeD9f7286292f119089F56e3068a3A931FCD49` | `0x06CaDDDf6CC08048596aE051c8ce644725219C73` |
+| Field             | Bakerloo                                     | Mainnet                                      |
+| ----------------- | -------------------------------------------- | -------------------------------------------- |
+| `oracleAddress`   | `0x72EeD9f7286292f119089F56e3068a3A931FCD49` | `0x06CaDDDf6CC08048596aE051c8ce644725219C73` |
 | `collateralAsset` | `0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5` | `0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d` |
 
 ### Validation Checks
@@ -25,6 +25,28 @@ For a product to be listed on the Autex, it must satisfy the following requireme
 - Extended metadata must conform to the expected schemas
 - API source (if applicable) must be valid and freely accessible
 - All data types must be correct and within expected bounds
+
+## Local Development
+
+### Setup
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.6
+```
+
+### Validate a Product Locally
+
+```bash
+export AUTONITY_RPC_URL="https://bakerloo.autonity-apis.com"
+export EXCHANGE_URL="https://exchange-server-next.up.railway.app"
+export VALIDATION_PRIVATE_KEY="your_private_key"
+export IPFS_API_URL="https://rpc.filebase.io"
+export IPFS_API_KEY="your_filebase_token"
+
+python scripts/validate_product.py <product_id>
+```
 
 ## Product Registration Paths
 
@@ -76,8 +98,9 @@ For products that are **already registered on-chain** and just need to be listed
 
 **On Pull Request:**
 
+- Retrieve product from on-chain registry
+- Retrieve extended metadata from IPFS
 - Validates JSON structure
-- Validates product exists on-chain
 - Validates extended metadata conforms to schema
 
 **On Merge to Master:**
@@ -88,31 +111,20 @@ For products that are **already registered on-chain** and just need to be listed
 
 For products that need to be **registered on-chain first**, then listed on the Autex.
 
+**On Pull Request:**
+
+- Validates JSON structure
+- Validates extended metadata conforms to schema
+
+**On Merge to Master:**
+
+- Pins extended metadata to IPFS
+- Registers product on-chain
+- Lists and reveals product on the Autex
+
 ## Environment Selection
 
 - `listing-only/bakerloo/` or `product-registration-and-listing/bakerloo/` → Uses **Bakerloo** environment
 - `listing-only/mainnet/` or `product-registration-and-listing/mainnet/` → Uses **Mainnet** environment
 
 PRs must not contain changes to both environments.
-
-## Local Development
-
-### Setup
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.6
-```
-
-### Validate a Product Locally
-
-```bash
-export AUTONITY_RPC_URL="https://bakerloo.autonity-apis.com"
-export EXCHANGE_URL="https://exchange-server-next.up.railway.app"
-export VALIDATION_PRIVATE_KEY="your_private_key"
-export IPFS_API_URL="https://rpc.filebase.io"
-export IPFS_API_KEY="your_filebase_token"
-
-python scripts/validate_product.py <product_id>
-```
