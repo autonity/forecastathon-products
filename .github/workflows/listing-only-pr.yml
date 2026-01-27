@@ -139,13 +139,13 @@ jobs:
 
   list-products:
     needs: [detect-environment, validate]
-    # Bakerloo: list on push to dev or master
-    # Mainnet: list only on push to master
+    # Bakerloo: list on push to dev
+    # Mainnet: list on push to master
     if: |
       github.event_name == 'push' &&
       needs.detect-environment.outputs.has_changes == 'true' &&
       (
-        (needs.detect-environment.outputs.environment == 'Bakerloo') ||
+        (needs.detect-environment.outputs.environment == 'Bakerloo' && github.ref == 'refs/heads/dev') ||
         (needs.detect-environment.outputs.environment == 'Mainnet' && github.ref == 'refs/heads/master')
       )
     runs-on: ubuntu-latest
