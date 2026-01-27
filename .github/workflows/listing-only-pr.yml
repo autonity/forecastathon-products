@@ -118,6 +118,8 @@ jobs:
       - name: Validate products on-chain
         env:
           AUTONITY_RPC_URL: ${{ vars.AUTONITY_RPC_URL }}
+          EXCHANGE_URL: ${{ vars.EXCHANGE_URL }}
+          VALIDATION_PRIVATE_KEY: ${{ secrets.VALIDATION_PRIVATE_KEY }}
         run: |
           echo "Validating products exist on-chain..."
 
