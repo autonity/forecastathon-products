@@ -1,6 +1,6 @@
 ## Purpose
 
-Contribute pull requests to this folder to request the listing of products you have already registered on the AFP. If you have not yet registered your product, please bridge over funds to purchase gas tokens or open a pull request against the `product-registration-and-listing` folder.
+Contribute pull requests to the appropriate network folder (Bakerloo or Mainnet)to request the listing of products you have already registered on the AFP. If you have not yet registered your product, please bridge over funds to purchase gas tokens or open a pull request against the `product-registration-and-listing` folder.
 
 ## Folder Structure
 

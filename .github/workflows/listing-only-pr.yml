@@ -78,11 +78,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.5
+
       - name: Display environment
         run: |
           echo "Running validation for environment: ${{ needs.detect-environment.outputs.environment }}"
 
-      - name: Validate JSON files
+      - name: Validate JSON structure
         run: |
           ENV_FOLDER="${{ needs.detect-environment.outputs.environment == 'Bakerloo' && 'bakerloo' || 'mainnet' }}"
 
@@ -100,10 +110,28 @@ jobs:
               exit 1
             fi
 
-            echo "Valid: $file"
+            echo "Valid JSON structure: $file"
           done
 
-          echo "All JSON files validated successfully"
+          echo "All JSON files have valid structure"
+
+      - name: Validate products on-chain
+        env:
+          AUTONITY_RPC_URL: ${{ vars.AUTONITY_RPC_URL }}
+        run: |
+          echo "Validating products exist on-chain..."
+
+          # Process each changed JSON file
+          while IFS= read -r file; do
+            if [ -n "$file" ] && [ -f "$file" ]; then
+              echo "Processing: $file"
+              PRODUCT_ID=$(jq -r '.product_id' "$file")
+              echo "Product ID: $PRODUCT_ID"
+              python scripts/validate_product.py "$PRODUCT_ID"
+            fi
+          done <<< "${{ needs.detect-environment.outputs.changed_files }}"
+
+          echo "All products validated successfully"
 
   list-products:
     needs: [detect-environment, validate]
@@ -117,12 +145,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r scripts/requirements.txt
+          pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.5
 
       - name: List products
         env:

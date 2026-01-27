@@ -22,3 +22,10 @@ Thumbs.db
 *.key
 *.keystore
 *.pem
+
+# Devenv
+.devenv/
+.devenv.flake.nix
+devenv.lock
+devenv.nix
+devenv.yaml
