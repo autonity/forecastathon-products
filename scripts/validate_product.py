@@ -9,7 +9,7 @@ Environment variables required:
     AUTONITY_RPC_URL: The RPC URL for the network
     EXCHANGE_URL: The exchange server URL
     VALIDATION_PRIVATE_KEY: Private key for read-only validation
-    IPFS_API_URL: The IPFS API URL (e.g., https://api.filebase.io/v1/ipfs)
+    IPFS_API_URL: The IPFS API URL (e.g., https://rpc.filebase.io)
 
 Environment variables optional:
     IPFS_API_KEY: The IPFS API key/token for authentication
