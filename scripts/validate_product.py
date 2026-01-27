@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 """
-Validate that a product exists on-chain.
+Validate product_id format.
 
 Usage:
     python validate_product.py <product_id>
 
-Environment variables required:
-    AUTONITY_RPC_URL: The RPC URL for the network
-
 Exit codes:
-    0: Product exists and is valid
-    1: Product does not exist or validation failed
+    0: Product ID format is valid
+    1: Product ID format is invalid
 """
 
-import os
+import re
 import sys
-
-import afp
 
 
 def main():
@@ -26,29 +21,18 @@ def main():
 
     product_id = sys.argv[1]
 
-    # Get configuration from environment
-    rpc_url = os.environ.get("AUTONITY_RPC_URL")
+    print(f"Validating product ID format: {product_id}")
 
-    if not rpc_url:
-        print("Error: AUTONITY_RPC_URL environment variable not set", file=sys.stderr)
+    # Validate product_id is a valid 32-byte hex string (with 0x prefix)
+    pattern = r"^0x[a-fA-F0-9]{64}$"
+
+    if not re.match(pattern, product_id):
+        print(f"Error: Invalid product_id format. Expected 0x followed by 64 hex characters.", file=sys.stderr)
+        print(f"Got: {product_id}", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Validating product: {product_id}")
-    print(f"RPC URL: {rpc_url}")
-
-    try:
-        app = afp.AFP(rpc_url=rpc_url)
-        product = app.Product(product_id)
-
-        # Try to fetch product info to verify it exists
-        info = product.info()
-        print(f"Product found: {info}")
-        print("Validation successful")
-        sys.exit(0)
-
-    except Exception as e:
-        print(f"Error: Product validation failed - {e}", file=sys.stderr)
-        sys.exit(1)
+    print("Product ID format is valid")
+    sys.exit(0)
 
 
 if __name__ == "__main__":

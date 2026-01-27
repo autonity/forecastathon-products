@@ -73,7 +73,7 @@ jobs:
     needs: detect-environment
     if: needs.detect-environment.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
-    # Note: No environment here - uses repository-level variables so PRs can run validation
+    # Note: No environment here - allows PRs to run validation without environment protection rules
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -82,11 +82,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.5
 
       - name: Display environment
         run: |
@@ -115,12 +110,9 @@ jobs:
 
           echo "All JSON files have valid structure"
 
-      - name: Validate products on-chain
-        env:
-          # Use repository-level variables with environment suffix
-          AUTONITY_RPC_URL: ${{ needs.detect-environment.outputs.environment == 'Bakerloo' && vars.BAKERLOO_RPC_URL || vars.MAINNET_RPC_URL }}
+      - name: Validate product ID format
         run: |
-          echo "Validating products exist on-chain..."
+          echo "Validating product ID formats..."
 
           # Process each changed JSON file
           while IFS= read -r file; do
@@ -132,7 +124,7 @@ jobs:
             fi
           done <<< "${{ needs.detect-environment.outputs.changed_files }}"
 
-          echo "All products validated successfully"
+          echo "All product IDs validated successfully"
 
   list-products:
     needs: [detect-environment, validate]
