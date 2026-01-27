@@ -55,10 +55,9 @@ def main():
             rpc_url=rpc_url,
             exchange_url=exchange_url,
         )
-        product = app.Product(product_id)
 
-        # Try to fetch product info to verify it exists
-        info = product.info()
+        product_api = app.Product()
+        info = product_api.get(product_id)
         print(f"Product found: {info}")
         print("Validation successful")
         sys.exit(0)
