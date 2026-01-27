@@ -7,7 +7,7 @@ on:
       - 'listing-only/bakerloo/**'
       - 'listing-only/mainnet/**'
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - 'listing-only/bakerloo/**'
       - 'listing-only/mainnet/**'
@@ -139,7 +139,7 @@ jobs:
 
   list-products:
     needs: [detect-environment, validate]
-    # List on push to master only (for both Bakerloo and Mainnet)
+    # List on push to main only (for both Bakerloo and Mainnet)
     if: github.event_name == 'push' && needs.detect-environment.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     environment: ${{ needs.detect-environment.outputs.environment }}

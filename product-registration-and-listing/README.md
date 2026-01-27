@@ -28,7 +28,7 @@ See the [root README](../README.md#product-requirements) for full requirements. 
 2. Create a folder named after the first six characters of your builder ID (e.g. `0x1234ab/`)
 3. Create a file named `<PRODUCT_SYMBOL>.json` (e.g. `USCPI-MAR26.json`)
 4. The file should contain the complete product specification and extended metadata
-5. Open a pull request against `master`
+5. Open a pull request against `main`
 6. Ensure all validation checks pass
 7. If approved, the AFP team will register your product and list it on the Autex
 
