@@ -1,6 +1,6 @@
 # Forecastathon Products
 
-This repository manages product listings for the AFP (Autonomous Futures Protocol) exchange. Products are validated and listed automatically through GitHub Actions workflows.
+This repository manages product registrations on the AFP (Autonomous Futures Protocol) and product listings on the Autex. Products are validated and listed automatically through GitHub Actions workflows, subject to manual checks.
 
 ## Directory Structure
 
@@ -9,11 +9,11 @@ This repository manages product listings for the AFP (Autonomous Futures Protoco
 │   ├── bakerloo/          # Bakerloo testnet products
 │   └── mainnet/           # Mainnet products
 ├── product-registration-and-listing/
-│   ├── bakerloo/          # Bakerloo testnet products (full registration)
+│   ├── bakerloo/          # Bakerloo testnet products
 │   └── mainnet/           # Mainnet products (full registration)
 └── scripts/
-    ├── validate_product.py   # Validates product exists on-chain
-    └── list_product.py       # Lists product on exchange
+    ├── validate_product.py   # Validates product exists on-chain and satisfy all requirements
+    └── list_product.py       # Lists product on Autex
 ```
 
 ## Workflows
@@ -23,11 +23,13 @@ This repository manages product listings for the AFP (Autonomous Futures Protoco
 For products that are **already registered on-chain** and just need to be listed on the exchange.
 
 **On Pull Request:**
+
 - Validates JSON structure
 - Validates product exists on-chain
 - Validates extended metadata conforms to schema
 
 **On Merge to Master:**
+
 - Lists and reveals product on the exchange
 
 ### Product Registration and Listing
@@ -63,11 +65,13 @@ PRs must not contain changes to both environments.
 Each environment (Bakerloo, Mainnet) requires:
 
 ### Variables
+
 - `AUTONITY_RPC_URL` - RPC endpoint for the network
 - `EXCHANGE_URL` - Exchange server URL
 - `IPFS_API_URL` - IPFS API endpoint (e.g., `https://rpc.filebase.io`)
 
 ### Secrets
+
 - `VALIDATION_PRIVATE_KEY` - Private key for read-only validation
 - `IPFS_API_KEY` - IPFS API authentication token
 - `EXCHANGE_ADMIN_KEY` - Admin key for listing products
