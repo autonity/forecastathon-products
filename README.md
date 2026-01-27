@@ -36,6 +36,18 @@ source .venv/bin/activate
 pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.6
 ```
 
+### IPFS Pinning with Filebase
+
+Extended metadata must be pinned on IPFS. We recommend using [Filebase](https://filebase.com/) which offers a free tier and native integration with the AFP-SDK.
+
+1. Sign up for a free account at [filebase.com](https://filebase.com/)
+2. Create an IPFS bucket in the Filebase console
+3. Go to **Access Keys** > **Choose Bucket to Generate Token** > Select your IPFS bucket
+4. Copy the Secret Access Token
+5. Copy `.env.example` to `.env` and add your Filebase token:
+
+The AFP-SDK will use this token to pin your extended metadata when creating products.
+
 ### Validate a Product Locally
 
 ```bash
