@@ -63,7 +63,15 @@ def main():
         sys.exit(0)
 
     except Exception as e:
-        print(f"Error: Product validation failed - {e}", file=sys.stderr)
+        error_msg = str(e)
+        if "Contract call reverted" in error_msg or "Invalid type" in error_msg:
+            print(f"Error: Product '{product_id}' does not exist on-chain.", file=sys.stderr)
+            print("Please verify:", file=sys.stderr)
+            print("  1. The product_id is correct (should be 0x followed by 64 hex characters)", file=sys.stderr)
+            print("  2. The product has been registered on the AFP contract", file=sys.stderr)
+            print("  3. You are submitting to the correct environment (bakerloo vs mainnet)", file=sys.stderr)
+        else:
+            print(f"Error: Product validation failed - {e}", file=sys.stderr)
         sys.exit(1)
 
 
