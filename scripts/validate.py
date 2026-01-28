@@ -357,8 +357,8 @@ def validate_product(
         environment = os.environ.get("VALIDATE_ENVIRONMENT")
         if environment and environment in ENVIRONMENT_CONFIG:
             expected = ENVIRONMENT_CONFIG[environment]
-            actual_oracle = info.base.oracle_spec.oracle_address
-            actual_collateral = info.base.collateral_asset
+            actual_oracle = info.product.base.oracle_spec.oracle_address
+            actual_collateral = info.product.base.collateral_asset
 
             print(f"Environment: {environment}")
 
@@ -385,7 +385,7 @@ def validate_product(
 
             # Validate startTime is at least 2 working days in the future (mainnet only)
             if environment == "mainnet":
-                start_time = info.base.start_time
+                start_time = info.product.base.start_time
                 now = datetime.now(timezone.utc)
                 working_days = count_working_days(now, start_time)
 
@@ -426,7 +426,7 @@ def validate_product(
             os.environ.get("DB_PWD"),
         ])
         if db_configured:
-            builder_address = info.base.metadata.builder
+            builder_address = info.product.base.metadata.builder
             print(f"Checking builder registration: {builder_address}")
 
             try:
