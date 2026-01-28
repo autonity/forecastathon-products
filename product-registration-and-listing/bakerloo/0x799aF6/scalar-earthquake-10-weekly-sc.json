@@ -1,9 +1,10 @@
 {
+  "initial_builder_stake": "0",
   "product": {
     "base": {
       "metadata": {
-        "builder": "0x0489171F5dc2aec5b7A76C906D5aE2A03D2338E2",
-        "symbol": "EQCT06W26",
+        "builder": "0x799aF677770d436b265Af0b851Ad38f04F2b167a",
+        "symbol": "EQCT10W26",
         "description": "Global Earthquake Count for Week Ending 3rd February 2026, 14:00 UTC"
       },
       "oracleSpec": {
@@ -14,13 +15,13 @@
         "fsvCalldata": "0x"
       },
       "collateralAsset": "0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5",
-      "startTime": "2026-01-30T20:10:00Z",
+      "startTime": "2026-01-28T20:10:00Z",
       "pointValue": "0.01",
       "priceDecimals": 0,
       "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
     },
     "expirySpec": {
-      "earliestFSPSubmissionTime": "2026-02-03T15:00:00Z",
+      "earliestFSPSubmissionTime": "2026-02-10T15:00:00Z",
       "tradeoutInterval": 3600
     },
     "minPrice": "1600",
