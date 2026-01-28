@@ -7,7 +7,7 @@ on:
       - 'product-registration-and-listing/bakerloo/**'
       - 'product-registration-and-listing/mainnet/**'
   push:
-    branches: [main, add-product-registration-and-listing]
+    branches: [main]
     paths:
       - 'product-registration-and-listing/bakerloo/**'
       - 'product-registration-and-listing/mainnet/**'
