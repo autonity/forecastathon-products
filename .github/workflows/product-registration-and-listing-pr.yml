@@ -78,39 +78,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.8
+
       - name: Display environment
         run: |
           echo "Running validation for environment: ${{ needs.detect-environment.outputs.environment }}"
 
-      - name: Validate JSON files
+      - name: Validate product specifications with SDK
+        env:
+          AUTONITY_RPC_URL: ${{ vars.AUTONITY_RPC_URL }}
+          VALIDATION_PRIVATE_KEY: ${{ secrets.VALIDATION_PRIVATE_KEY }}
         run: |
-          ENV_FOLDER="${{ needs.detect-environment.outputs.environment == 'Bakerloo' && 'bakerloo' || 'mainnet' }}"
+          echo "Validating product specifications..."
 
-          echo "Validating JSON files in product-registration-and-listing/$ENV_FOLDER/"
-
-          find "product-registration-and-listing/$ENV_FOLDER" -name "*.json" -type f | while read -r file; do
-            echo "Validating: $file"
-            if ! jq empty "$file" 2>/dev/null; then
-              echo "::error::Invalid JSON in $file"
-              exit 1
+          # Process each changed JSON file
+          while IFS= read -r file; do
+            if [ -n "$file" ] && [ -f "$file" ]; then
+              echo "Validating: $file"
+              python scripts/validate_product_spec.py "$file"
             fi
+          done <<< "${{ needs.detect-environment.outputs.changed_files }}"
 
-            if ! jq -e '.product_id' "$file" > /dev/null 2>&1; then
-              echo "::error::Missing required field 'product_id' in $file"
-              exit 1
-            fi
+          echo "All product specifications validated successfully"
 
-            if ! jq -e '.funding_address' "$file" > /dev/null 2>&1; then
-              echo "::error::Missing required field 'funding_address' in $file"
-              exit 1
-            fi
-
-            echo "Valid: $file"
-          done
-
-          echo "All JSON files validated successfully"
-
-  list-products:
+  register-and-list:
     needs: [detect-environment, validate]
     if: github.event_name == 'push' && needs.detect-environment.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
@@ -122,29 +121,50 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r scripts/requirements.txt
+          pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.8
 
-      - name: List products
+      - name: Register and list products
         env:
           AUTONITY_RPC_URL: ${{ vars.AUTONITY_RPC_URL }}
+          IPFS_API_URL: ${{ vars.IPFS_API_URL }}
+          IPFS_API_KEY: ${{ secrets.IPFS_API_KEY }}
+          REGISTRATION_PRIVATE_KEY: ${{ secrets.REGISTRATION_PRIVATE_KEY }}
           EXCHANGE_URL: ${{ vars.EXCHANGE_URL }}
           EXCHANGE_ADMIN_KEY: ${{ secrets.EXCHANGE_ADMIN_KEY }}
         run: |
-          echo "Listing products for environment: ${{ needs.detect-environment.outputs.environment }}"
+          echo "Registering and listing products for environment: ${{ needs.detect-environment.outputs.environment }}"
 
           # Process each changed JSON file
           while IFS= read -r file; do
             if [ -n "$file" ] && [ -f "$file" ]; then
+              echo "========================================"
               echo "Processing: $file"
-              PRODUCT_ID=$(jq -r '.product_id' "$file")
-              echo "Product ID: $PRODUCT_ID"
+              echo "========================================"
+
+              # Step 1: Register product (pins to IPFS + registers on-chain)
+              echo "Step 1: Registering product..."
+              REGISTER_OUTPUT=$(python scripts/register_product.py "$file")
+              echo "$REGISTER_OUTPUT"
+
+              # Extract product ID from output
+              PRODUCT_ID=$(echo "$REGISTER_OUTPUT" | grep "^PRODUCT_ID=" | cut -d'=' -f2)
+              if [ -z "$PRODUCT_ID" ]; then
+                echo "::error::Failed to extract product ID from registration output"
+                exit 1
+              fi
+              echo "Registered product ID: $PRODUCT_ID"
+
+              # Step 2: List product on exchange
+              echo "Step 2: Listing product on exchange..."
               python scripts/list_product.py "$PRODUCT_ID"
+
+              echo "Product $PRODUCT_ID registered and listed successfully"
             fi
           done <<< "${{ needs.detect-environment.outputs.changed_files }}"
 
-          echo "All products listed successfully"
+          echo "All products registered and listed successfully"
