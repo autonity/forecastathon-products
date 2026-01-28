@@ -1,2 +1,4 @@
-afp-sdk @ git+https://github.com/autonity/afp-sdk@v0.6.0-rc.8
+# For Bakerloo: pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.9
+# For Mainnet: pip install afp-sdk==0.6.0
+afp-sdk @ git+https://github.com/autonity/afp-sdk@v0.6.0-rc.9
 psycopg2-binary>=2.9.9
