@@ -52,7 +52,7 @@
   "outcome_point": {
     "fsp_type": "scalar",
     "observation": {
-      "reference_date": "2026-02-03",
+      "reference_date": "2026-01-07",
       "release_date": "2026-02-03"
     },
     "_comment": "Observation period: 2026-01-27T14:00:00Z to 2026-02-03T14:00:00Z (7 days to the hour)"
