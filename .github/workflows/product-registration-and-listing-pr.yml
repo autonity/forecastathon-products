@@ -103,7 +103,7 @@ jobs:
           while IFS= read -r file; do
             if [ -n "$file" ] && [ -f "$file" ]; then
               echo "Validating: $file"
-              python scripts/validate_product_spec.py "$file"
+              python scripts/validate.py "$file"
             fi
           done <<< "${{ needs.detect-environment.outputs.changed_files }}"
 

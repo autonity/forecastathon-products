@@ -131,7 +131,7 @@ jobs:
               echo "Processing: $file"
               PRODUCT_ID=$(jq -r '.product_id' "$file")
               echo "Product ID: $PRODUCT_ID"
-              python scripts/validate_product.py "$PRODUCT_ID"
+              python scripts/validate.py "$PRODUCT_ID"
             fi
           done <<< "${{ needs.detect-environment.outputs.changed_files }}"
 
