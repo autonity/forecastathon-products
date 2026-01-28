@@ -1,1 +1,1 @@
-afp-sdk @ git+https://github.com/autonity/afp-sdk@v0.6.0-rc.5
+afp-sdk @ git+https://github.com/autonity/afp-sdk@v0.6.0-rc.8
