@@ -8,7 +8,7 @@
         "description": "Global Earthquake Count for Week Ending 3rd February 2026, 14:00 UTC"
       },
       "oracleSpec": {
-        "oracleAddress": "0x799aF677770d436b265Af0b851Ad38f04F2b167a",
+        "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
         "fsvDecimals": 0,
         "fspAlpha": "1.0",
         "fspBeta": "0.0",
