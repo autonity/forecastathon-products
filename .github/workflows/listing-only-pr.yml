@@ -86,7 +86,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.8
+          pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.8 psycopg2-binary
 
       - name: Display environment
         run: |
@@ -122,6 +122,12 @@ jobs:
           VALIDATION_PRIVATE_KEY: ${{ secrets.VALIDATION_PRIVATE_KEY }}
           IPFS_API_URL: ${{ vars.IPFS_API_URL }}
           IPFS_API_KEY: ${{ secrets.IPFS_API_KEY }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PWD: ${{ secrets.DB_PWD }}
+          VALIDATE_ENVIRONMENT: ${{ needs.detect-environment.outputs.environment == 'Bakerloo' && 'bakerloo' || 'mainnet' }}
         run: |
           echo "Validating products exist on-chain..."
 

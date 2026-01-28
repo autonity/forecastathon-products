@@ -21,6 +21,16 @@ Environment variables required for post-registration validation:
 Environment variables optional:
     IPFS_API_KEY: The IPFS API key/token for authentication
 
+Environment variables for builder registration check (all required if any set):
+    DB_HOST: Database host
+    DB_PORT: Database port
+    DB_NAME: Database name
+    DB_USERNAME: Database username
+    DB_PWD: Database password
+
+Environment variables for post-registration validation:
+    VALIDATE_ENVIRONMENT: Environment name (bakerloo or mainnet) for address validation
+
 Exit codes:
     0: Validation successful
     1: Validation failed
@@ -33,6 +43,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 
 import afp
+import psycopg2
 from afp.exceptions import IPFSError, NotFoundError, ValidationError
 
 # Minimum working days required between PR submission and product start time
@@ -98,6 +109,61 @@ def detect_input_type(arg: str) -> str:
         if os.path.isfile(arg):
             return "spec"
         return "unknown"
+
+
+def check_builder_registered(builder_address: str) -> bool:
+    """
+    Check if a builder address is registered in the Forecastathon.
+
+    Requires environment variables:
+        DB_HOST: Database host
+        DB_PORT: Database port
+        DB_NAME: Database name
+        DB_USERNAME: Database username
+        DB_PWD: Database password
+
+    Args:
+        builder_address: The wallet address to check
+
+    Returns:
+        True if the builder is registered, False otherwise
+    """
+    db_host = os.environ.get("DB_HOST")
+    db_port = os.environ.get("DB_PORT")
+    db_name = os.environ.get("DB_NAME")
+    db_user = os.environ.get("DB_USERNAME")
+    db_password = os.environ.get("DB_PWD")
+
+    if not all([db_host, db_port, db_name, db_user, db_password]):
+        raise RuntimeError(
+            "Database configuration incomplete. Required: DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PWD"
+        )
+
+    try:
+        conn = psycopg2.connect(
+            host=db_host,
+            port=int(db_port),
+            dbname=db_name,
+            user=db_user,
+            password=db_password,
+            sslmode="require",
+        )
+        cursor = conn.cursor()
+
+        # Query to check if the wallet address exists (case-insensitive)
+        cursor.execute(
+            "SELECT 1 FROM forecastathon.users WHERE LOWER(wallet_address) = LOWER(%s)",
+            (builder_address,),
+        )
+
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        return result is not None
+
+    except psycopg2.Error as e:
+        raise RuntimeError(f"Database error: {e}")
 
 
 def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
@@ -199,7 +265,39 @@ def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
 
             print(f"  Working days check: {working_days} >= {MIN_WORKING_DAYS_BEFORE_START} ✓")
 
-        # 8. Output computed product ID for reference
+        # 8. Validate builder is a registered Forecastathon participant
+        db_configured = all([
+            os.environ.get("DB_HOST"),
+            os.environ.get("DB_PORT"),
+            os.environ.get("DB_NAME"),
+            os.environ.get("DB_USERNAME"),
+            os.environ.get("DB_PWD"),
+        ])
+        if db_configured:
+            builder_address = specification.product.base.metadata.builder
+            print(f"  Checking builder registration: {builder_address}")
+
+            try:
+                is_registered = check_builder_registered(builder_address)
+                if not is_registered:
+                    print(
+                        f"Error: Builder {builder_address} is not a registered "
+                        f"Forecastathon participant",
+                        file=sys.stderr,
+                    )
+                    print("", file=sys.stderr)
+                    print(
+                        "Please register at https://forecastathon.ai/join-now",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+                print(f"  Builder registration: {builder_address} ✓")
+            except RuntimeError as e:
+                print(f"Warning: Could not verify builder registration: {e}")
+        else:
+            print("  Builder registration check: skipped (DB_* env vars not set)")
+
+        # 9. Output computed product ID for reference
         product_id = product_api.id(specification)
         print("Validation successful!")
         print(f"  Product symbol: {specification.product.base.metadata.symbol}")
@@ -250,6 +348,103 @@ def validate_product(
         product_api = app.Product()
         info = product_api.get(product_id)
         print(f"Product found: {info}")
+
+        # Validate oracle and collateral addresses match environment
+        environment = os.environ.get("VALIDATE_ENVIRONMENT")
+        if environment and environment in ENVIRONMENT_CONFIG:
+            expected = ENVIRONMENT_CONFIG[environment]
+            actual_oracle = info.base.oracle_spec.oracle_address
+            actual_collateral = info.base.collateral_asset
+
+            print(f"Environment: {environment}")
+
+            if actual_oracle.lower() != expected["oracle_address"].lower():
+                print(
+                    f"Error: Oracle address mismatch for {environment}",
+                    file=sys.stderr,
+                )
+                print(f"  Expected: {expected['oracle_address']}", file=sys.stderr)
+                print(f"  Got: {actual_oracle}", file=sys.stderr)
+                sys.exit(1)
+
+            if actual_collateral.lower() != expected["collateral_asset"].lower():
+                print(
+                    f"Error: Collateral asset mismatch for {environment}",
+                    file=sys.stderr,
+                )
+                print(f"  Expected: {expected['collateral_asset']}", file=sys.stderr)
+                print(f"  Got: {actual_collateral}", file=sys.stderr)
+                sys.exit(1)
+
+            print(f"  Oracle address: {actual_oracle} ✓")
+            print(f"  Collateral asset: {actual_collateral} ✓")
+
+            # Validate startTime is at least 2 working days in the future (mainnet only)
+            if environment == "mainnet":
+                start_time = info.base.start_time
+                now = datetime.now(timezone.utc)
+                working_days = count_working_days(now, start_time)
+
+                print(f"  Start time: {start_time.isoformat()}")
+                print(f"  Current time: {now.isoformat()}")
+                print(f"  Working days until start: {working_days}")
+
+                if working_days < MIN_WORKING_DAYS_BEFORE_START:
+                    print(
+                        f"Error: startTime must be at least {MIN_WORKING_DAYS_BEFORE_START} "
+                        f"full working days in the future",
+                        file=sys.stderr,
+                    )
+                    print(f"  Start time: {start_time.isoformat()}", file=sys.stderr)
+                    print(f"  Current time: {now.isoformat()}", file=sys.stderr)
+                    print(
+                        f"  Working days until start: {working_days} "
+                        f"(need at least {MIN_WORKING_DAYS_BEFORE_START})",
+                        file=sys.stderr,
+                    )
+                    print("", file=sys.stderr)
+                    print(
+                        "Working days are Monday through Friday. Weekends do not count.",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+
+                print(f"  Working days check: {working_days} >= {MIN_WORKING_DAYS_BEFORE_START} ✓")
+        else:
+            print("Warning: VALIDATE_ENVIRONMENT not set, skipping oracle/collateral/startTime checks")
+
+        # Validate builder is a registered Forecastathon participant
+        db_configured = all([
+            os.environ.get("DB_HOST"),
+            os.environ.get("DB_PORT"),
+            os.environ.get("DB_NAME"),
+            os.environ.get("DB_USERNAME"),
+            os.environ.get("DB_PWD"),
+        ])
+        if db_configured:
+            builder_address = info.base.metadata.builder
+            print(f"Checking builder registration: {builder_address}")
+
+            try:
+                is_registered = check_builder_registered(builder_address)
+                if not is_registered:
+                    print(
+                        f"Error: Builder {builder_address} is not a registered "
+                        f"Forecastathon participant",
+                        file=sys.stderr,
+                    )
+                    print("", file=sys.stderr)
+                    print(
+                        "Please register at https://forecastathon.ai/join-now",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+                print(f"Builder registration: {builder_address} ✓")
+            except RuntimeError as e:
+                print(f"Warning: Could not verify builder registration: {e}")
+        else:
+            print("Builder registration check: skipped (DB_* env vars not set)")
+
         print("Validation successful")
         sys.exit(0)
 

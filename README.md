@@ -26,6 +26,26 @@ For a product to be listed on the Autex, it must satisfy the following requireme
 - API source (if applicable) must be valid and freely accessible
 - All data types must be correct and within expected bounds
 
+## AFP SDK
+
+The [AFP SDK](https://pypi.org/project/afp-sdk/) is the primary tool for creating and registering products on the Autonomous Futures Protocol. It provides:
+
+- **Product specification creation** - Build valid product JSON specifications with proper schema validation
+- **Extended metadata generation** - Create and validate extended metadata structures
+- **IPFS pinning** - Native integration with Filebase for pinning extended metadata
+- **On-chain registration** - Register products directly on the AFP smart contracts
+- **Product validation** - Validate existing products and their extended metadata
+
+### Installation
+
+```bash
+pip install afp-sdk
+```
+
+### Documentation
+
+For detailed usage instructions, API reference, and examples, visit the [AFP SDK on PyPI](https://pypi.org/project/afp-sdk/).
+
 ## Local Development
 
 ### Setup
@@ -33,7 +53,7 @@ For a product to be listed on the Autex, it must satisfy the following requireme
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install git+https://github.com/autonity/afp-sdk@v0.6.0-rc.6
+pip install afp-sdk
 ```
 
 ### IPFS Pinning with Filebase
@@ -57,7 +77,7 @@ export VALIDATION_PRIVATE_KEY="your_private_key"
 export IPFS_API_URL="https://rpc.filebase.io"
 export IPFS_API_KEY="your_filebase_token"
 
-python scripts/validate_product.py <product_id>
+python scripts/validate.py <product_id>
 ```
 
 ## Product Registration Paths
@@ -98,7 +118,8 @@ Choosing the Self-Funded Product Registration path is closer to target state so 
 │   ├── bakerloo/          # Bakerloo testnet products
 │   └── mainnet/           # Mainnet products
 └── scripts/
-    ├── validate_product.py   # Validates product exists on-chain and satisfies all requirements
+    ├── validate.py           # Validates product specs (pre-registration) or on-chain products (post-registration)
+    ├── register_product.py   # Pins to IPFS and registers product on-chain
     └── list_product.py       # Lists product on Autex
 ```
 
