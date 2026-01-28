@@ -1,1 +1,2 @@
 afp-sdk @ git+https://github.com/autonity/afp-sdk@v0.6.0-rc.8
+psycopg2-binary>=2.9.9
