@@ -212,7 +212,7 @@ def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
 
             if actual_oracle.lower() != expected["oracle_address"].lower():
                 print(
-                    f"Error: Oracle address mismatch for {environment}",
+                    f"Error: Incorrect oracle address for {environment}",
                     file=sys.stderr,
                 )
                 print(f"  Expected: {expected['oracle_address']}", file=sys.stderr)
@@ -221,7 +221,7 @@ def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
 
             if actual_collateral.lower() != expected["collateral_asset"].lower():
                 print(
-                    f"Error: Collateral asset mismatch for {environment}",
+                    f"Error: Incorrect collateral asset for {environment}",
                     file=sys.stderr,
                 )
                 print(f"  Expected: {expected['collateral_asset']}", file=sys.stderr)
@@ -293,7 +293,11 @@ def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
                     sys.exit(1)
                 print(f"  Builder registration: {builder_address} ✓")
             except RuntimeError as e:
-                print(f"Warning: Could not verify builder registration: {e}")
+                print(
+                    f"Error: Could not verify builder registration: {e}",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
         else:
             print("  Builder registration check: skipped (DB_* env vars not set)")
 
@@ -360,7 +364,7 @@ def validate_product(
 
             if actual_oracle.lower() != expected["oracle_address"].lower():
                 print(
-                    f"Error: Oracle address mismatch for {environment}",
+                    f"Error: Incorrect oracle address for {environment}",
                     file=sys.stderr,
                 )
                 print(f"  Expected: {expected['oracle_address']}", file=sys.stderr)
@@ -369,7 +373,7 @@ def validate_product(
 
             if actual_collateral.lower() != expected["collateral_asset"].lower():
                 print(
-                    f"Error: Collateral asset mismatch for {environment}",
+                    f"Error: Incorrect collateral asset for {environment}",
                     file=sys.stderr,
                 )
                 print(f"  Expected: {expected['collateral_asset']}", file=sys.stderr)
@@ -441,7 +445,11 @@ def validate_product(
                     sys.exit(1)
                 print(f"Builder registration: {builder_address} ✓")
             except RuntimeError as e:
-                print(f"Warning: Could not verify builder registration: {e}")
+                print(
+                    f"Error: Could not verify builder registration: {e}",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
         else:
             print("Builder registration check: skipped (DB_* env vars not set)")
 
