@@ -245,25 +245,16 @@ def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
 
             if working_days < MIN_WORKING_DAYS_BEFORE_START:
                 print(
-                    f"Error: startTime must be at least {MIN_WORKING_DAYS_BEFORE_START} "
-                    f"full working days in the future",
-                    file=sys.stderr,
+                    f"  Warning: startTime should be at least {MIN_WORKING_DAYS_BEFORE_START} "
+                    f"full working days in the future"
                 )
-                print(f"  Start time: {start_time.isoformat()}", file=sys.stderr)
-                print(f"  Current time: {now.isoformat()}", file=sys.stderr)
                 print(
                     f"  Working days until start: {working_days} "
-                    f"(need at least {MIN_WORKING_DAYS_BEFORE_START})",
-                    file=sys.stderr,
+                    f"(recommended at least {MIN_WORKING_DAYS_BEFORE_START})"
                 )
-                print("", file=sys.stderr)
-                print(
-                    "Working days are Monday through Friday. Weekends do not count.",
-                    file=sys.stderr,
-                )
-                sys.exit(1)
-
-            print(f"  Working days check: {working_days} >= {MIN_WORKING_DAYS_BEFORE_START} ✓")
+                print("  Working days are Monday through Friday. Weekends do not count.")
+            else:
+                print(f"  Working days check: {working_days} >= {MIN_WORKING_DAYS_BEFORE_START} ✓")
 
         # 8. Validate builder is a registered Forecastathon participant
         db_configured = all([
@@ -395,25 +386,16 @@ def validate_product(
 
                 if working_days < MIN_WORKING_DAYS_BEFORE_START:
                     print(
-                        f"Error: startTime must be at least {MIN_WORKING_DAYS_BEFORE_START} "
-                        f"full working days in the future",
-                        file=sys.stderr,
+                        f"  Warning: startTime should be at least {MIN_WORKING_DAYS_BEFORE_START} "
+                        f"full working days in the future"
                     )
-                    print(f"  Start time: {start_time.isoformat()}", file=sys.stderr)
-                    print(f"  Current time: {now.isoformat()}", file=sys.stderr)
                     print(
                         f"  Working days until start: {working_days} "
-                        f"(need at least {MIN_WORKING_DAYS_BEFORE_START})",
-                        file=sys.stderr,
+                        f"(recommended at least {MIN_WORKING_DAYS_BEFORE_START})"
                     )
-                    print("", file=sys.stderr)
-                    print(
-                        "Working days are Monday through Friday. Weekends do not count.",
-                        file=sys.stderr,
-                    )
-                    sys.exit(1)
-
-                print(f"  Working days check: {working_days} >= {MIN_WORKING_DAYS_BEFORE_START} ✓")
+                    print("  Working days are Monday through Friday. Weekends do not count.")
+                else:
+                    print(f"  Working days check: {working_days} >= {MIN_WORKING_DAYS_BEFORE_START} ✓")
         else:
             print("Warning: VALIDATE_ENVIRONMENT not set, skipping oracle/collateral/startTime checks")
 
