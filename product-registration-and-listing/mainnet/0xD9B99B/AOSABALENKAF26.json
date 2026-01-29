@@ -1,0 +1,68 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
+        "symbol": "AOSABALENKAG26",
+        "description": "Aryna Sabalenka wins 2026 Australian Open Women's Singles"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+        "fsvDecimals": 0,
+        "fspAlpha": "0.0",
+        "fspBeta": "1.0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+      "startTime": "2026-01-30T15:00:00Z",
+      "pointValue": "1.0",
+      "priceDecimals": 2,
+      "extendedMetadata": "bafkreihdwdcefgh4kdnjxwnxd43whjskfxuk4c5jtusp4gvu6k6kbbypwu"
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-01-31T09:00:00Z",
+      "tradeoutInterval": 0
+    },
+    "minPrice": "0",
+    "maxPrice": "1"
+  },
+  "outcome_space": {
+    "fsp_type": "ternary",
+    "description": "Who will the 2026 Australian Open Women's Singles title?",
+    "outcome_statement": "{outcome} wins the 2026 Australian Open Women's Singles title",
+    "base_case": {
+      "condition": "{outcome}",
+      "fsp_resolution": "FSP=1 if {outcome} is winner of the 2026 Australian Open Women's Singles title at the Final match of the competition, adjudicated by the chair umpire according to the rules of the Australian Open (evaluates to TRUE). FSP=0 if {outcome} is not formally adjudicated as winner (evaluates to FALSE). FSP=0.5 if there is no formally adjudicated winner of the 2026 Australian Open Women's Singles title (evaluates to UNRESOLVED). Data sources for FSP resolution. Primary source: Australian Open 2026 official announcement on <https://ausopen.com/results>. Secondary sources: Womens Tennis Association (WTA) announcement on <https://www.wtatennis.com/tournaments/901/australian-open/2026/scores>; Australian Associated Press (AAP)"
+    },
+    "edge_cases": [
+      {
+        "condition": "The competition is cancelled/abandoned at any stage and no champion is adjudicated, and {outcome} has not been officially eliminated/forfeited.",
+        "fsp_resolution": "FSP=0.5 (evaluates to UNRESOLVED) - there is no formally adjudicated winner of the 2026 Australian Open Women's Singles title. Data sources: Primary <https://ausopen.com/results>. Secondary <https://www.wtatennis.com/tournaments/901/australian-open/2026/scores>; <https://www.aap.com.au/>."
+      },
+      {
+        "condition": "{outcome} is officially eliminated/withdraws/forfeits at any stage before being adjudicated champion.",
+        "fsp_resolution": "FSP=0 (evaluates to FALSE) - failed to win. Data sources: Primary <https://ausopen.com/results>. Secondary <https://www.wtatennis.com/tournaments/901/australian-open/2026/scores>; <https://www.aap.com.au/>."
+      }
+    ],
+    "expected_resolution_date": "2026-01-31",
+    "category": "sport",
+    "tags": [
+      "Tennis",
+      "Grand Slam",
+      "2026 Australian Open",
+      "Women's Singles"
+    ]
+  },
+  "outcome_point": {
+    "fsp_type": "ternary",
+    "outcome": "Aryna Sabalenka"
+  },
+  "oracle_config": {
+    "description": "Manual oracle system for product settlement",
+    "project_url": null
+  },
+  "oracle_fallback": {
+    "fallback_time": "2026-02-06T23:59:00Z",
+    "fallback_fsp": "0.5"
+  }
+}
