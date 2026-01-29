@@ -91,7 +91,7 @@ python scripts/validate.py <product_id>
 5. Generate an extended metadata structure using the SDK and ensure it conforms to the expected schemas (required to be listed on the Autex).
 6. Pin the extended metadata on IPFS via any pinning service. The AFP-SDK offers native pinning via Filebase, but any service can be used.
 7. Submit your product registration transaction to the AFP, ensuring that the address submitting the transaction is registered for the Forecastathon. This address will be the Product's Builder ID.
-8. Open a PR against this repo, adding your ProductId to the `listing-only` folder. Name the file the same as your Product Symbol (e.g. `BTCVOL51W25.json`) and place it in a subfolder named after the first six characters of your builder ID (e.g. `0x123456`).
+8. Open a PR against this repo, adding your ProductId to the `listing-only` folder. Name the file the same as your Product Symbol (e.g. `BTCVOL51W25.json`) and place it in a subfolder named after the first six characters of your builder ID (e.g. `0x123456`). Name your branch using the format `<first-six-characters-of-builder-id>-<symbol>-<network>` (e.g. `0x123456-BTCVOL51W25-mainnet`).
 9. If your product passes the validation checks, it will be listed on the Autex and your PR will be merged.
 
 ### Funding Requested Product Registration
@@ -101,12 +101,22 @@ python scripts/validate.py <product_id>
 1. Using the [AFP SDK](https://pypi.org/project/afp-sdk/), construct a valid product specification using the required `oracleAddress` and `collateralAsset` from the table above.
 2. Generate an extended metadata structure using the SDK and ensure it conforms to the expected schemas.
 3. Pin the extended metadata on IPFS via any pinning service. The AFP-SDK offers native pinning via Filebase, but any service can be used.
-4. Open a PR against this repo, contributing to the `product-registration-and-listing` folder the complete product details (product specification and extended metadata). Please ensure the configured builder ID is your Forecastathon participant address as scores will be associated with this account. Name the file the same as your Product Symbol (e.g. `USCPI-MAR26.json`) and place it in a subfolder named after the first six characters of your builder ID (e.g. `0x123456`).
+4. Open a PR against this repo, contributing to the `product-registration-and-listing` folder the complete product details (product specification and extended metadata). Please ensure the configured builder ID is your Forecastathon participant address as scores will be associated with this account. Name the file the same as your Product Symbol (e.g. `USCPI-MAR26.json`) and place it in a subfolder named after the first six characters of your builder ID (e.g. `0x123456`). Name your branch using the format `<builder-id-prefix>-<symbol>-<network>` (e.g. `0x1234-USCPI-MAR26-mainnet`).
 5. If all checks pass, your product will be registered by the AFP team, and automatically listed on the Autex.
 
 ### Which Path Should I Choose?
 
 Choosing the Self-Funded Product Registration path is closer to target state so products registered that way and subsequently listed on Autex will receive a **30% score boost** relative to those registered via the Funding Requested Product Registration path.
+
+### Accessing Your Private Key (Web3Auth Social Login)
+
+If you registered for the Forecastathon using social login (Google, Twitter, etc.) via Web3Auth, you can access your private key by:
+
+1. Log in to your wallet at [wallet.web3auth.io](https://wallet.web3auth.io/)
+2. Go to **Settings** > **Privacy & Security**
+3. Click **Copy Private Key**
+
+This private key is required for self-funded product registration via the AFP SDK.
 
 ## Directory Structure
 
