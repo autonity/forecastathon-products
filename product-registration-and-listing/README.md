@@ -15,7 +15,7 @@ See the [root README](../README.md#product-requirements) for full requirements. 
 
 - `builder` must be a registered Forecastathon participant
 - `startTime` must be at least **two full working days** after PR contribution
-- Extended metadata must be pinned on IPFS and conform to expected schemas
+- Extended metadata must conform to expected schemas (pinning is handled automatically by the workflow)
 
 ## Folder Structure
 
