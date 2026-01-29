@@ -28,9 +28,10 @@ See the [root README](../README.md#product-requirements) for full requirements. 
 2. Create a folder named after the first six characters of your builder ID (e.g. `0x1234ab/`)
 3. Create a file named `<PRODUCT_SYMBOL>.json` (e.g. `USCPI-MAR26.json`)
 4. The file should contain the complete product specification and extended metadata
-5. Open a pull request against `main`
-6. Ensure all validation checks pass
-7. If approved, the AFP team will register your product and list it on the Autex
+5. Create a branch named `<builder-id-prefix>-<symbol>-<network>` (e.g. `0x1234-USCPI-MAR26-mainnet`)
+6. Open a pull request against `main`
+7. Ensure all validation checks pass
+8. If approved, the AFP team will register your product and list it on the Autex
 
 **Note:** Each PR should only contain changes for a single environment. PRs with changes spanning both `bakerloo/` and `mainnet/` will be rejected.
 

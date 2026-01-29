@@ -33,7 +33,8 @@ See the [root README](../README.md#product-requirements) for full requirements. 
      "product_id": "0x..."
    }
    ```
-5. Open a pull request against `main`
-6. Ensure all validation checks pass
+5. Create a branch named `<builder-id-prefix>-<symbol>-<network>` (e.g. `0x1234-BTCVOL51W25-mainnet`)
+6. Open a pull request against `main`
+7. Ensure all validation checks pass
 
 **Note:** Each PR should only contain changes for a single environment. PRs with changes spanning both `bakerloo/` and `mainnet/` will be rejected.
