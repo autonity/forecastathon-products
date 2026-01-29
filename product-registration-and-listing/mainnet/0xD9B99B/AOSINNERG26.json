@@ -62,7 +62,7 @@
     "project_url": null
   },
   "oracle_fallback": {
-    "fallback_time": "2026-02-07T23:59:00Z",
+    "fallback_time": "2026-02-08T23:59:00Z",
     "fallback_fsp": "0.5"
   }
 }
