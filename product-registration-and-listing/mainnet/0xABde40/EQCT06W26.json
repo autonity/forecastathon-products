@@ -1,0 +1,79 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0xABde40A5F7Bb3a0bdF97E4C515063128f9c7cE42",
+        "symbol": "EQCT06W26",
+        "description": "Global Earthquake Count for Week Ending 3rd February 2026, 14:00 UTC"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+        "fsvDecimals": 0,
+        "fspAlpha": "1.0",
+        "fspBeta": "0.0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+      "startTime": "2026-01-30T15:00:00Z",
+      "pointValue": "0.01",
+      "priceDecimals": 0,
+      "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-02-03T15:00:00Z",
+      "tradeoutInterval": 3600
+    },
+    "minPrice": "1600",
+    "maxPrice": "5000"
+  },
+  "outcome_space": {
+    "fsp_type": "scalar",
+    "description": "Global Earthquake Count - Total number of earthquakes recorded worldwide by USGS",
+    "base_case": {
+      "condition": "How many earthquakes will be recorded globally in the 7 days ending {observation.reference_date} at 14:00 UTC?",
+      "fsp_resolution": "FSP equals the total count of earthquakes recorded by the United States Geological Survey (USGS) Earthquake Hazards Program during the 7-day observation period ending at 14:00 UTC on {observation.reference_date}. The observation window starts exactly 168 hours (7 days) before the end time. The count includes all earthquakes of any magnitude detected by the USGS global seismic monitoring network. The authoritative count is obtained from the USGS FDSN Event Web Service API by querying with starttime and endtime parameters matching the observation window. The 'count' field in the API metadata response provides the official total."
+    },
+    "edge_cases": [
+      {
+        "condition": "USGS API is unavailable or returns an error for more than 48 hours after 14:00 UTC on {observation.reference_date}",
+        "fsp_resolution": "FSP is UNRESOLVED"
+      },
+      {
+        "condition": "USGS revises the earthquake count at any point after initial publication",
+        "fsp_resolution": "FSP = the first published count value retrieved after 15:00 UTC on {observation.reference_date}, not subsequent revisions"
+      }
+    ],
+    "frequency": "weekly",
+    "units": "Earthquake count (integer)",
+    "source_name": "United States Geological Survey (USGS) Earthquake Hazards Program",
+    "source_uri": "https://earthquake.usgs.gov/fdsnws/event/1/"
+  },
+  "outcome_point": {
+    "fsp_type": "scalar",
+    "observation": {
+      "reference_date": "2026-02-03",
+      "release_date": "2026-02-03"
+    },
+    "_comment": "Observation period: 2026-01-27T14:00:00Z to 2026-02-03T14:00:00Z (7 days to the hour)"
+  },
+  "oracle_config": {
+    "description": "USGS Earthquake Hazards Program FDSN Event Web Service for earthquake count retrieval",
+    "project_url": "https://earthquake.usgs.gov/fdsnws/event/1/",
+    "evaluation_api_spec": {
+      "standard": "JSONPath",
+      "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2026-01-27T14:00:00Z&endtime=2026-02-03T14:00:00Z",
+      "date_path": "$.metadata.generated",
+      "value_path": "$.metadata.count",
+      "headers": null,
+      "timezone": "UTC",
+      "date_format_type": "unix_timestamp",
+      "timestamp_scale": 1000,
+      "auth_param_name": null,
+      "auth_param_location": "none"
+    }
+  },
+  "oracle_fallback": {
+    "fallback_time": "2026-02-11T15:00:00Z",
+    "fallback_fsp": "2600"
+  }
+}
