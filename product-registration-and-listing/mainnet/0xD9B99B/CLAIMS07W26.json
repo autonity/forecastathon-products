@@ -1,0 +1,88 @@
+{
+    "product": {
+        "base": {
+            "metadata": {
+                "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
+                "symbol": "CLAIMS07W26",
+                "description": "US Initial Claims Week 7 2026"
+            },
+            "oracleSpec": {
+                "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+                "fsvDecimals": 3,
+                "fspAlpha": "0.001",
+                "fspBeta": "0.0",
+                "fsvCalldata": "0x"
+            },
+            "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+            "startTime": "2026-02-06T15:00:00Z",
+            "pointValue": "0.1",
+            "priceDecimals": 6,
+            "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+        },
+        "expirySpec": {
+            "earliestFSPSubmissionTime": "2026-02-13T13:30:00Z",
+            "tradeoutInterval": 3600
+        },
+        "minPrice": "185.00",
+        "maxPrice": "275.00"
+    },
+    "outcome_space": {
+        "fsp_type": "scalar",
+        "description": "US Initial Jobless Claims (Thousands, Seasonally Adjusted)",
+        "base_case": {
+            "condition": "What will the US Initial Jobless Claims be for the week ending {observation.reference_date}?",
+            "fsp_resolution": "FSP equals the seasonally adjusted number of initial jobless claims (in thousands) for the week ending {observation.reference_date}, as reported by the U.S. Department of Labor, Employment and Training Administration, and released on {observation.release_date}. Claims values are scaled by 0.001 (e.g., 241,000 claims settles as 241). This data is available via the FRED API (Series ID: ICSA)."
+        },
+        "edge_cases": [
+            {
+                "condition": "The U.S. Department of Labor announces that it cannot produce the Initial Jobless Claims number for the week ending {observation.reference_date} due to exceptional circumstances (such as government shutdown) but provides an alternative estimate or proxy value.",
+                "fsp_resolution": "FSP = the alternative estimate or proxy value provided by the U.S. Department of Labor, scaled by 0.001."
+            },
+            {
+                "condition": "The U.S. Department of Labor announces that it cannot produce the Initial Jobless Claims number for the week ending {observation.reference_date} due to exceptional circumstances and will not publish one for this period.",
+                "fsp_resolution": "FSP = 200.00, the Initial Jobless Claims value from week #6 (2026-01-31)."
+            }
+        ],
+        "frequency": "weekly",
+        "units": "Thousands (scaled by 0.001)",
+        "source_name": "U.S. Department of Labor, Employment and Training Administration",
+        "source_uri": "https://fred.stlouisfed.org/series/ICSA",
+        "history_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.stlouisfed.org/fred/series/observations?series_id=ICSA&file_type=json",
+            "date_path": "$.observations[*].date",
+            "value_path": "$.observations[*].value",
+            "headers": null,
+            "timezone": "America/New_York",
+            "date_format_type": "iso_8601",
+            "auth_param_name": "api_key",
+            "auth_param_location": "query"
+        }
+    },
+    "outcome_point": {
+        "fsp_type": "scalar",
+        "observation": {
+            "reference_date": "2026-02-07",
+            "release_date": "2026-02-13"
+        }
+    },
+    "oracle_config": {
+        "description": "Prototype1 oracle configuration for Initial Jobless Claims data retrieval from FRED API",
+        "project_url": "https://github.com/example/oracle-prototype1",
+        "evaluation_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.stlouisfed.org/fred/series/observations?series_id=ICSA&file_type=json",
+            "date_path": "$.observations[?(@.date=='2026-02-07')].date",
+            "value_path": "$.observations[?(@.date=='2026-02-07')].value",
+            "headers": null,
+            "timezone": "America/New_York",
+            "date_format_type": "iso_8601",
+            "auth_param_name": "api_key",
+            "auth_param_location": "query"
+        }
+    },
+    "oracle_fallback": {
+        "fallback_fsp": "200.00",
+        "fallback_time": "2026-05-14T13:30:00Z"
+    }
+}
