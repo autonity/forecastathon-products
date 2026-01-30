@@ -1,0 +1,84 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0x316Bea29df7725a4E2d85ABc371f6A1cd25175a8",
+        "symbol": "MUNPL26",
+        "description": "Will Manchester United win the Premier League 2025/26?"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
+        "fsvDecimals": 0,
+        "fspAlpha": "1.0",
+        "fspBeta": "0.0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xDEfAaC81a079533Bf2FB004c613cc2870cF0A5b5",
+      "startTime": "2026-02-03T12:00:00Z",
+      "pointValue": "1",
+      "priceDecimals": 0,
+      "extendedMetadata": ""
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-05-25T18:00:00Z",
+      "tradeoutInterval": 3600
+    },
+    "minPrice": "0",
+    "maxPrice": "1"
+  },
+  "outcome_space": {
+    "fsp_type": "binary",
+    "description": "Binary outcome for Manchester United winning the Premier League 2025/26 season",
+    "base_case": {
+      "condition": "Will Manchester United finish in 1st place in the Premier League 2025/26 season standings?",
+      "fsp_resolution": "FSP = 1 (Yes) if Manchester United finishes in 1st position in the official Premier League 2025/26 final standings after all 38 matchday fixtures are completed. FSP = 0 (No) if any other team finishes in 1st position. The official standings are determined by the Premier League rules: points (3 for win, 1 for draw, 0 for loss), then goal difference, then goals scored, then head-to-head record, then playoff if required."
+    },
+    "edge_cases": [
+      {
+        "condition": "The Premier League 2025/26 season is cancelled, abandoned, or not completed by June 30, 2026",
+        "fsp_resolution": "FSP is UNRESOLVED"
+      },
+      {
+        "condition": "Manchester United is relegated, dissolved, or expelled from the Premier League during the 2025/26 season",
+        "fsp_resolution": "FSP = 0 (No)"
+      },
+      {
+        "condition": "A points deduction is applied to Manchester United after the final matchday but before official ratification",
+        "fsp_resolution": "FSP is determined by the final ratified standings, including any points deductions"
+      }
+    ],
+    "frequency": "one-time",
+    "units": "Binary (0 = No, 1 = Yes)",
+    "source_name": "ESPN Sports API",
+    "source_uri": "https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings"
+  },
+  "outcome_point": {
+    "fsp_type": "binary",
+    "observation": {
+      "reference_date": "2026-05-24",
+      "release_date": "2026-05-25"
+    },
+    "_comment": "Premier League 2025/26 season final matchday is May 24, 2026. Settlement after official confirmation."
+  },
+  "oracle_config": {
+    "description": "ESPN public API for Premier League standings. Manchester United team ID is 360. No API key required.",
+    "project_url": "https://www.espn.com/soccer/standings/_/league/eng.1",
+    "evaluation_api_spec": {
+      "standard": "JSONPath",
+      "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings",
+      "date_path": "$.seasons[0].year",
+      "value_path": "$.children[0].standings.entries[?(@.team.id=='360')].stats[?(@.name=='rank')].value",
+      "headers": null,
+      "timezone": "UTC",
+      "date_format_type": "string",
+      "timestamp_scale": 1,
+      "auth_param_name": null,
+      "auth_param_location": "none"
+    },
+    "_evaluation_logic": "If value_path returns 1, FSP = 1 (Manchester United is champion). If value_path returns any other number (2-20), FSP = 0 (Manchester United did not win)."
+  },
+  "oracle_fallback": {
+    "fallback_time": "2026-06-30T18:00:00Z",
+    "fallback_fsp": "0"
+  }
+}
