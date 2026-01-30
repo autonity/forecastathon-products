@@ -70,10 +70,23 @@ The AFP-SDK will use this token to pin your extended metadata when creating prod
 
 ### Validate a Product Locally
 
+The validation script supports two modes:
+
+**Pre-registration validation** (validate a product specification JSON file):
+
 ```bash
-export AUTONITY_RPC_URL="https://bakerloo.autonity-apis.com"
-export EXCHANGE_URL="https://exchange-server-next.up.railway.app"
+export AUTONITY_RPC_URL="https://rpc1.bakerloo.autonity.org"
 export VALIDATION_PRIVATE_KEY="your_private_key"
+
+python scripts/validate.py path/to/product_spec.json
+```
+
+**Post-registration validation** (validate an on-chain product):
+
+```bash
+export AUTONITY_RPC_URL="https://rpc1.bakerloo.autonity.org"
+export VALIDATION_PRIVATE_KEY="your_private_key"
+export EXCHANGE_URL="https://exchange-server-next.up.railway.app"
 export IPFS_API_URL="https://rpc.filebase.io"
 export IPFS_API_KEY="your_filebase_token"
 
@@ -145,7 +158,7 @@ For products that are **already registered on-chain** and just need to be listed
 - Validates JSON structure
 - Validates extended metadata conforms to schema
 
-**On Merge to Master:**
+**On Merge to Main:**
 
 - Lists and reveals product on the Autex
 
@@ -158,7 +171,7 @@ For products that need to be **registered on-chain first**, then listed on the A
 - Validates JSON structure
 - Validates extended metadata conforms to schema
 
-**On Merge to Master:**
+**On Merge to Main:**
 
 - Pins extended metadata to IPFS
 - Registers product on-chain
