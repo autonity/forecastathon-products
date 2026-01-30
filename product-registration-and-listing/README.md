@@ -14,7 +14,7 @@ See the [root README](../README.md#product-requirements) for full requirements. 
 | `collateralAsset` | `0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5` | `0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d` |
 
 - `builder` must be a registered Forecastathon participant
-- `startTime` must be at least **two full working days** after PR contribution
+- `startTime` should be at least **two full working days** after PR contribution
 - Extended metadata must conform to expected schemas (pinning is handled automatically by the workflow)
 
 ## Folder Structure

@@ -20,7 +20,7 @@ For a product to be listed on the Autex, it must satisfy the following requireme
 ### Validation Checks
 
 - `builder` must be a registered participant in the [Forecastathon](https://forecastathon.ai/join-now)
-- `startTime` must be at least **two full working days** after PR contribution
+- `startTime` should be at least **two full working days** after PR contribution
 - Extended metadata must be pinned on IPFS
 - Extended metadata must conform to the expected schemas
 - API source (if applicable) must be valid and freely accessible
@@ -86,7 +86,6 @@ python scripts/validate.py path/to/product_spec.json
 ```bash
 export AUTONITY_RPC_URL="https://rpc1.bakerloo.autonity.org"
 export VALIDATION_PRIVATE_KEY="your_private_key"
-export EXCHANGE_URL="https://exchange-server-next.up.railway.app"
 export IPFS_API_URL="https://rpc.filebase.io"
 export IPFS_API_KEY="your_filebase_token"
 
