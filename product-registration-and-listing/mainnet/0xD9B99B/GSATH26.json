@@ -1,0 +1,62 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
+        "symbol": "GSATH26",
+        "description": "Global Surface Air Temperature for February 2026"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+        "fsvDecimals": 4,
+        "fspAlpha": "1.0",
+        "fspBeta": "0.0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+      "startTime": "2026-02-15T15:00:00Z",
+      "pointValue": "1.0",
+      "priceDecimals": 2,
+      "extendedMetadata": "bafkreihdwdcefgh4kdnjxwnxd43whjskfxuk4c5jtusp4gvu6k6kbbypwu"
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-03-15T12:00:00Z",
+      "tradeoutInterval": 86400
+    },
+    "minPrice": "1.0",
+    "maxPrice": "1.5"
+  },
+  "outcome_space": {
+    "fsp_type": "scalar",
+    "description": "Global surface air yemperature for February 2026",
+    "base_case": {
+      "condition": "What will be the global surface air temperature anomaly measured against pre-industrial levels (1850–1900) for month ending {observation.reference_date}?",
+      "fsp_resolution": "FSP equals the global surface air temperature anomaly measured against pre-industrial levels (1850-1900) for the month ending {observation.reference_date} as published by the EU Copernicus Climate Change Service in their 'Surface air temperature' monthly Climate bulletin. The 1850-1900 reference period is used by UN Climate Action <https://www.un.org/en/climatechange> for monitoring the approach of global temperature to the limits specified in the COP21 Paris Agreement of 2015. Primary sources: <https://climate.copernicus.eu/climate-bulletin> for month ending {observation.release_date}; underlying data {source_name} {source_uri}. Secondary sources: 'ERA5 monthly averaged data on single levels (C3S/ECMWF)' monthly <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means> and daily <https://sites.ecmwf.int/data/climatepulse/data/series/era5_daily_series_2t_global.csv> (daily); the Copernicus methodology for calculating the offset for the reference period 1850-1900 is described at <https://climate.copernicus.eu/climate-bulletin-about-data-and-analysis>."
+    },
+    "edge_cases": [
+      {
+        "condition": "EU Copernicus Climate Change Service does not publish a global surface air temperature anomaly measured against pre-industrial levels (1850-1900) for the month ending {observation.reference_date} by 31 calendar days after {observation.release_date}",
+        "fsp_resolution": "FSP is UNRESOLVED"
+      }
+    ],
+    "frequency": "monthly",
+    "units": "Degrees Celsius (°C)",
+    "source_name": "Copernicus Climate bulletin, Surface air temperature",
+    "source_uri": "https://climate.copernicus.eu/surface-air-temperature-maps"
+  },
+  "outcome_point": {
+    "fsp_type": "scalar",
+    "observation": {
+      "reference_date": "2026-02-28",
+      "release_date": "2026-03-15"
+    }
+  },
+  "oracle_config": {
+    "description": "Manual oracle system for product settlement",
+    "project_url": null
+  },
+  "oracle_fallback": {
+    "fallback_time": "2026-04-15T00:00:00Z",
+    "fallback_fsp": "1.25"
+  }
+}
