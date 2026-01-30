@@ -72,8 +72,8 @@
         "evaluation_api_spec": {
             "standard": "JSONPath",
             "url": "https://api.stlouisfed.org/fred/series/observations?series_id=CPIAUCSL&file_type=json",
-            "date_path": "$.observations[?(@.date=='{outcome_point.observation.reference_date}')].date",
-            "value_path": "$.observations[?(@.date=='{outcome_point.observation.reference_date}')].value",
+            "date_path": "$.observations[?(@.date=='{observation.reference_date}')].date",
+            "value_path": "$.observations[?(@.date=='{observation.reference_date}')].value",
             "headers": null,
             "timezone": "America/New_York",
             "date_format_type": "iso_8601",
