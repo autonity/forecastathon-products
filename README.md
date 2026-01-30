@@ -86,6 +86,7 @@ python scripts/validate.py path/to/product_spec.json
 ```bash
 export AUTONITY_RPC_URL="https://rpc1.bakerloo.autonity.org"
 export VALIDATION_PRIVATE_KEY="your_private_key"
+export EXCHANGE_URL="https://exchange-server-next.up.railway.app"
 export IPFS_API_URL="https://rpc.filebase.io"
 export IPFS_API_KEY="your_filebase_token"
 

@@ -16,6 +16,7 @@ Environment variables required:
 
 Environment variables required for post-registration validation:
     IPFS_API_URL: The IPFS API URL (e.g., https://rpc.filebase.io)
+    EXCHANGE_URL: The exchange server URL
 
 Environment variables optional:
     IPFS_API_KEY: The IPFS API key/token for authentication
@@ -320,18 +321,21 @@ def validate_product(
     product_id: str,
     rpc_url: str,
     private_key: str,
+    exchange_url: str,
     ipfs_api_url: str,
     ipfs_api_key: str | None,
 ) -> None:
     """Validate a product exists on-chain with valid extended metadata (post-registration)."""
     print(f"Validating product: {product_id}")
     print(f"RPC URL: {rpc_url}")
+    print(f"Exchange URL: {exchange_url}")
     print(f"IPFS API URL: {ipfs_api_url}")
 
     try:
         app = afp.AFP(
             authenticator=afp.PrivateKeyAuthenticator(private_key),
             rpc_url=rpc_url,
+            exchange_url=exchange_url,
             ipfs_api_url=ipfs_api_url,
             ipfs_api_key=ipfs_api_key,
         )
@@ -550,6 +554,13 @@ def main():
 
     elif input_type == "product_id":
         # Post-registration validation - requires additional env vars
+        exchange_url = os.environ.get("EXCHANGE_URL")
+        if not exchange_url:
+            print(
+                "Error: EXCHANGE_URL environment variable not set", file=sys.stderr
+            )
+            sys.exit(1)
+
         ipfs_api_url = os.environ.get("IPFS_API_URL")
         if not ipfs_api_url:
             print(
@@ -560,7 +571,7 @@ def main():
         ipfs_api_key = os.environ.get("IPFS_API_KEY")  # Optional
 
         validate_product(
-            arg, rpc_url, private_key, ipfs_api_url, ipfs_api_key
+            arg, rpc_url, private_key, exchange_url, ipfs_api_url, ipfs_api_key
         )
 
     else:
