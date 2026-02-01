@@ -184,4 +184,14 @@ For products that need to be **registered on-chain first**, then listed on the A
 
 PRs must not contain changes to both environments.
 
+## Agentic Development
+
+An AFP Product Builder agent skill is available to install that includes instructions for AI coding agents on how to build valid products:
+
+```py
+npx skills add autonity/afp-sdk
+```
+
+It follows the [Agent Skills Specification](https://agentskills.io) that is supported by the majority of coding agents.
+
 [AFP SDK]: https://github.com/autonity/afp-sdk
