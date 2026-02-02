@@ -69,6 +69,5 @@
     "oracle_fallback": {
         "fallback_fsp": "4.40",
         "fallback_time": "2026-07-08T13:30:00Z"
-    },
-    "_comment": "This is a canonical example. The following data is for schema validation only and requires correct values: builder, collateralAsset, oracleAddress. Need to verify value set for: pointValue. Need to replace dummy values set for minPrice, maxPrice."
+    }
 }
