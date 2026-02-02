@@ -30,12 +30,12 @@
         "fsp_type": "scalar",
         "description": "US Real GDP Quarter-over-Quarter Annualized Growth Rate (Advance Estimate)",
         "base_case": {
-            "condition": "What will the {observation.reference_date} US GDP Q4 Advanced Estimate annualized growth rate be?",
-            "fsp_resolution": "FSP equals the seasonally adjusted annual rate of real GDP growth for Q4 2025 as reported by the U.S. Bureau of Economic Analysis (BEA) in their Gross Domestic Product, 4th Quarter 2025 (Advance Estimate) news release on {observation.release_date}. This is the quarter-over-quarter change expressed as an annualized rate. The Advance Estimate is published three times to release, update and finalize; this product settles against the first official release of {observation.release_date}."
+            "condition": "What will the US GDP Quarterly Advanced Estimate annualized growth rate be at {observation.reference_date}?",
+            "fsp_resolution": "FSP equals the seasonally adjusted annual rate of real GDP growth for the Quarter beginning {observation.reference_date} as reported by the U.S. Bureau of Economic Analysis (BEA) in their Gross Domestic Product (Advance Estimate) news release on {observation.release_date}. This is the quarter-over-quarter change expressed as an annualized rate. The Advance Estimate is published three times to release, update and finalize; this product settles against the first official release of {observation.release_date}."
         },
         "edge_cases": [
             {
-                "condition": "BEA does not publish US GDP Q4 2025 (Advance Estimate) by 90 days after April 9th 2026, the scheduled release date of the final update to the US GDP Q4 2025 Advance Estimate.",
+                "condition": "BEA does not publish a finalized US GDP Quarterly (Advance Estimate) for the quarter by 138 days after the first release on {observation.release_date}. (138 days being the sum of 48 days between first release and finalized release of the Advance Estimate, and an additional 90 days.)",
                 "fsp_resolution": "FSP is UNRESOLVED"
             }
         ],
