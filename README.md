@@ -28,7 +28,7 @@ For a product to be listed on the Autex, it must satisfy the following requireme
 
 ## AFP SDK
 
-The [AFP SDK] is the primary tool for creating and registering products on the Autonomous Futures Protocol. It provides:
+The [AFP SDK](https://github.com/autonity/afp-sdk) is the primary tool for creating and registering products on the Autonomous Futures Protocol. It provides:
 
 - **Product specification creation** - Build valid product JSON specifications with proper schema validation
 - **Extended metadata generation** - Create and validate extended metadata structures
@@ -44,7 +44,7 @@ pip install afp-sdk
 
 ### Documentation
 
-For detailed usage instructions, API reference, and examples, visit the [AFP SDK].
+For detailed usage instructions, API reference, and examples, visit the [AFP SDK](https://github.com/autonity/afp-sdk).
 
 ## Local Development
 
@@ -100,9 +100,9 @@ python scripts/validate.py <product_id>
 1. Bridge over a small amount of USDC to Autonity from your chosen chain via the [ProtoUSD bridge](https://autonity.protousd.com/). As part of your first bridging operation you will receive a small amount of ATN to pay for a swap on an AMM.
 2. Exchange some of your bridged USDC for ATN to ensure you have sufficient gas (1 USDC worth of ATN is more than sufficient to register a few products!). For example, [Mori](https://morifi.xyz/autonity#swap) and [Leibniz](https://leibnizv3.de/#/swap) can be used to make such swaps.
 3. You now have sufficient ATN to register a product on the AFP!
-4. Using the [AFP SDK], configure a product specification according to your desired product parameters. Ensure you use the required `oracleAddress` and `collateralAsset` from the table above.
+4. Using the [AFP SDK](https://github.com/autonity/afp-sdk), configure a product specification according to your desired product parameters. Ensure you use the required `oracleAddress` and `collateralAsset` from the table above.
 5. Generate an extended metadata structure using the SDK and ensure it conforms to the expected schemas (required to be listed on the Autex).
-6. Pin the extended metadata on IPFS via any pinning service, using either DAG-CBOR or DAG-JSON codec. The AFP-SDK offers native pinning, any service can be used.
+6. Pin the extended metadata on IPFS via any pinning service, using either DAG-CBOR or DAG-JSON codec. The AFP-SDK offers native pinning; any service can be used.
 7. Submit your product registration transaction to the AFP, ensuring that the address submitting the transaction is registered for the Forecastathon. This address will be the Product's Builder ID.
 8. Open a PR against this repo, adding your ProductId to the `listing-only` folder. Name the file the same as your Product Symbol (e.g. `BTCVOL51W25.json`) and place it in a subfolder named after the first six characters of your builder ID (e.g. `0x123456`). Name your branch using the format `<first-six-characters-of-builder-id>-<symbol>-<network>` (e.g. `0x123456-BTCVOL51W25-mainnet`).
 9. If your product passes the validation checks, it will be listed on the Autex and your PR will be merged.
@@ -111,7 +111,7 @@ python scripts/validate.py <product_id>
 
 **Pre-requisite**: You must be a participant in the [Forecastathon](https://forecastathon.ai/join-now)
 
-1. Using the [AFP SDK], construct a valid product specification using the required `oracleAddress` and `collateralAsset` from the table above. Note: the `extendedMetadata` field can be omitted or set to `null` as it will be automatically generated when the workflow pins to IPFS.
+1. Using the [AFP SDK](https://github.com/autonity/afp-sdk), construct a valid product specification using the required `oracleAddress` and `collateralAsset` from the table above. Note: the `extendedMetadata` field can be omitted or set to `null` as it will be automatically generated when the workflow pins to IPFS.
 2. Generate an extended metadata structure using the SDK and ensure it conforms to the expected schemas.
 3. Open a PR against this repo, contributing to the `product-registration-and-listing` folder the complete product details (product specification and extended metadata). Please ensure the configured builder ID is your Forecastathon participant address as scores will be associated with this account. Name the file the same as your Product Symbol (e.g. `BTCVOL51W25.json`) and place it in a subfolder named after the first six characters of your builder ID (e.g. `0x123456`). Name your branch using the format `<first-six-characters-of-builder-id>-<symbol>-<network>` (e.g. `0x123456-BTCVOL51W25-mainnet`).
 4. If all checks pass, your product will be registered by the AFP team (including IPFS pinning), and automatically listed on the Autex.
@@ -193,5 +193,3 @@ npx skills add autonity/afp-sdk
 ```
 
 It follows the [Agent Skills Specification](https://agentskills.io) that is supported by the majority of coding agents.
-
-[AFP SDK]: https://github.com/autonity/afp-sdk
