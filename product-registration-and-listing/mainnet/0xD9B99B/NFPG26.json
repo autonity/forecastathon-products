@@ -8,7 +8,7 @@
             },
             "oracleSpec": {
                 "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
-                "fsvDecimals": 3,
+                "fsvDecimals": 0,
                 "fspAlpha": "0.001",
                 "fspBeta": "0.0",
                 "fsvCalldata": "0x"
@@ -16,15 +16,15 @@
             "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
             "startTime": "2026-02-03T15:00:00Z",
             "pointValue": "0.5",
-            "priceDecimals": 6,
+            "priceDecimals": 3,
             "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
         },
         "expirySpec": {
             "earliestFSPSubmissionTime": "2026-02-06T13:30:00Z",
             "tradeoutInterval": 3600
         },
-        "minPrice": "155.00",
-        "maxPrice": "165.00"
+        "minPrice": "155.000",
+        "maxPrice": "165.000"
     },
     "outcome_space": {
         "fsp_type": "scalar",
@@ -82,7 +82,7 @@
         }
     },
     "oracle_fallback": {
-        "fallback_fsp": "159.50",
+        "fallback_fsp": "159.500",
         "fallback_time": "2026-05-07T13:30:00Z"
     }
 }
