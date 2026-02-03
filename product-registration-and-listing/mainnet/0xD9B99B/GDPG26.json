@@ -1,0 +1,73 @@
+{
+    "product": {
+        "base": {
+            "metadata": {
+                "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
+                "symbol": "GDPG26",
+                "description": "US GDP Q4 2025 (Advance Estimate)"
+            },
+            "oracleSpec": {
+                "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+                "fsvDecimals": 2,
+                "fspAlpha": "1",
+                "fspBeta": "0.0",
+                "fsvCalldata": "0x"
+            },
+            "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+            "startTime": "2026-02-03T15:00:00Z",
+            "pointValue": "1",
+            "priceDecimals": 2,
+            "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+        },
+        "expirySpec": {
+            "earliestFSPSubmissionTime": "2026-02-20T13:30:00Z",
+            "tradeoutInterval": 3600
+        },
+        "minPrice": "2.50",
+        "maxPrice": "5.50"
+    },
+    "outcome_space": {
+        "fsp_type": "scalar",
+        "description": "US Real GDP Quarter-over-Quarter Annualized Growth Rate (Advance Estimate)",
+        "base_case": {
+            "condition": "What will the US GDP Quarterly Advanced Estimate annualized growth rate be at {observation.reference_date}?",
+            "fsp_resolution": "FSP equals the seasonally adjusted annual rate of real GDP growth for the Quarter beginning {observation.reference_date} as reported by the U.S. Bureau of Economic Analysis (BEA) in their Gross Domestic Product (Advance Estimate) news release on {observation.release_date}. This is the quarter-over-quarter change expressed as an annualized rate. The Advance Estimate is published three times to release, update and finalize; this product settles against the first official release of {observation.release_date}."
+        },
+        "edge_cases": [
+            {
+                "condition": "BEA does not publish a finalized US GDP Quarterly (Advance Estimate) for the quarter by 138 days after the first release on {observation.release_date}. (138 days being the sum of 48 days between first release and finalized release of the Advance Estimate, and an additional 90 days.)",
+                "fsp_resolution": "FSP is UNRESOLVED"
+            }
+        ],
+        "frequency": "quarterly",
+        "units": "Percent (%, annualized rate)",
+        "source_name": "U.S. Bureau of Economic Analysis",
+        "source_uri": "https://www.bea.gov/data/gdp/gross-domestic-product"
+    },
+    "outcome_point": {
+        "fsp_type": "scalar",
+        "observation": {
+            "reference_date": "2025-10-01",
+            "release_date": "2026-02-20"
+        }
+    },
+    "oracle_config": {
+        "description": "Prototype1 oracle configuration for Real GDP growth rate data retrieval from FRED API",
+        "project_url": "https://github.com/example/oracle-prototype1",
+        "evaluation_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.stlouisfed.org/fred/series/observations?series_id=A191RL1Q225SBEA&output_type=4&realtime_start=1776-07-04&realtime_end=9999-12-31&file_type=json",
+            "date_path": "$.observations[*].date",
+            "value_path": "$.observations[*].value",
+            "headers": null,
+            "timezone": "America/New_York",
+            "date_format_type": "iso_8601",
+            "auth_param_name": "api_key",
+            "auth_param_location": "query"
+        }
+    },
+    "oracle_fallback": {
+        "fallback_fsp": "4.40",
+        "fallback_time": "2026-07-08T13:30:00Z"
+    }
+}
