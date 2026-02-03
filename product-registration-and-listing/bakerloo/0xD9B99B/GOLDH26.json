@@ -4,7 +4,7 @@
             "metadata": {
                 "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
                 "symbol": "GOLDH26",
-                "description": "LBMA Precious Metals Prices | Value 02/26 | February 2026 Release"
+                "description": "LBMA Gold Prices - monthly - US Dollar - PM - Average | Value 02/26 | March 2026 Release"
             },
             "oracleSpec": {
                 "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
@@ -63,11 +63,11 @@
         "fsp_type": "scalar",
         "observation": {
             "reference_date": "2026-02-01",
-            "release_date": "2026-03-05"
+            "release_date": "2026-03-01"
         }
     },
     "oracle_config": {
-        "description": "Prototype1 oracle configuration for CPI-U data retrieval from FRED API",
+        "description": "Prototype1 oracle configuration for LBMA gold, data retrieval from DBnomics",
         "project_url": "https://github.com/example/oracle-prototype1",
         "evaluation_api_spec": {
             "standard": "JSONPath",
