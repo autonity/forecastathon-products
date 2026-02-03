@@ -4,8 +4,7 @@
             "metadata": {
                 "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
                 "symbol": "GOLDJ26",
-                "description": "LBMA Gold Prices - monthly - US Dollar - PM - Average | Value 03/26 | April 2026 Release
-                "
+                "description": "LBMA Gold Prices - monthly - US Dollar - PM - Average | Value 03/26 | April 2026 Release"
             },
             "oracleSpec": {
                 "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
