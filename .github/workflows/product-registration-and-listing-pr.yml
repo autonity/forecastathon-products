@@ -3,14 +3,8 @@ name: Product Registration and Listing
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - 'product-registration-and-listing/bakerloo/**'
-      - 'product-registration-and-listing/mainnet/**'
   push:
     branches: [main]
-    paths:
-      - 'product-registration-and-listing/bakerloo/**'
-      - 'product-registration-and-listing/mainnet/**'
 
 jobs:
   detect-environment:

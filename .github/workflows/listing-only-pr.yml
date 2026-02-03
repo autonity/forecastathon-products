@@ -3,14 +3,8 @@ name: Listing Only
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - 'listing-only/bakerloo/**'
-      - 'listing-only/mainnet/**'
   push:
     branches: [main]
-    paths:
-      - 'listing-only/bakerloo/**'
-      - 'listing-only/mainnet/**'
 
 jobs:
   detect-environment:
