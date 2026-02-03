@@ -33,17 +33,15 @@ jobs:
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          RELEVANT_FILES=$(echo "$CHANGED_FILES" | grep -E "^listing-only/(bakerloo|mainnet)/" || true)
-
           # Filter to only JSON files in listing-only
-          JSON_FILES=$(echo "$RELEVANT_FILES" | grep "^listing-only/.*/.*\.json$" || true)
+          JSON_FILES=$(echo "$CHANGED_FILES" | grep "^listing-only/.*/.*\.json$" || true)
           echo "JSON files: $JSON_FILES"
           echo "changed_files<<EOF" >> $GITHUB_OUTPUT
           echo "$JSON_FILES" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-          BAKERLOO_CHANGES=$(echo "$RELEVANT_FILES" | grep -c "^listing-only/bakerloo/" || true)
-          MAINNET_CHANGES=$(echo "$RELEVANT_FILES" | grep -c "^listing-only/mainnet/" || true)
+          BAKERLOO_CHANGES=$(echo "$CHANGED_FILES" | grep -c "^listing-only/bakerloo/" || true)
+          MAINNET_CHANGES=$(echo "$CHANGED_FILES" | grep -c "^listing-only/mainnet/" || true)
 
           echo "Bakerloo changes: $BAKERLOO_CHANGES"
           echo "Mainnet changes: $MAINNET_CHANGES"
