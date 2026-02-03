@@ -3,28 +3,28 @@
         "base": {
             "metadata": {
                 "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
-                "symbol": "USGDPG26",
+                "symbol": "GDPG26",
                 "description": "US GDP Q4 2025 (Advance Estimate)"
             },
             "oracleSpec": {
                 "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
-                "fsvDecimals": 3,
+                "fsvDecimals": 2,
                 "fspAlpha": "0.001",
                 "fspBeta": "0.0",
                 "fsvCalldata": "0x"
             },
             "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
             "startTime": "2026-02-03T15:00:00Z",
-            "pointValue": "5",
-            "priceDecimals": 6,
+            "pointValue": "1",
+            "priceDecimals": 2,
             "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
         },
         "expirySpec": {
             "earliestFSPSubmissionTime": "2026-02-20T13:30:00Z",
             "tradeoutInterval": 3600
         },
-        "minPrice": "3.80",
-        "maxPrice": "4.40"
+        "minPrice": "2.50",
+        "maxPrice": "5.50"
     },
     "outcome_space": {
         "fsp_type": "scalar",
