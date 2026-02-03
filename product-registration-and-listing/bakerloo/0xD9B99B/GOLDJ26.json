@@ -1,0 +1,88 @@
+{
+    "product": {
+        "base": {
+            "metadata": {
+                "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
+                "symbol": "GOLDJ26",
+                "description": "LBMA Precious Metals Prices | Value 03/26 | March 2026 Release"
+            },
+            "oracleSpec": {
+                "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+                "fsvDecimals": 2,
+                "fspAlpha": "1",
+                "fspBeta": "0",
+                "fsvCalldata": "0x"
+            },
+            "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+            "startTime": "2026-03-01T00:00:00Z",
+            "pointValue": "0.001",
+            "priceDecimals": 2,
+            "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+        },
+        "expirySpec": {
+            "earliestFSPSubmissionTime": "2026-04-01T12:00:00Z",
+            "tradeoutInterval": 3600
+        },
+        "minPrice": "4500.00",
+        "maxPrice": "5500.00"
+    },
+    "outcome_space": {
+        "fsp_type": "scalar",
+        "description": "LBMA Gold Prices - monthly - US Dollar - PM - Average",
+        "base_case": {
+            "condition": "What will be the final published monthly average of the LBMA Gold Price (PM) in USD, as published via DBnomics for month beginning {observation.reference_date}?",
+            "fsp_resolution": "FSP equals the final monthly average of the LBMA Gold Price (PM) in USD, as published in the DBnomics Series ID [gold_M_USD_PM_AVG] for the month beginning {observation.reference_date}. Settlement occurs after the end of the reference month, once the monthly average value is no longer revised and is superseded by the publication of data for the subsequent month. The data for the Series is available by direct download from the DBnomics website page and via the DBnomics API (Docs: https://docs.db.nomics.world/)."
+        },
+        "edge_cases": [
+            {
+                "condition": "The monthly average value for the month beginning {observation.reference_date} is not superseded by the publication of data for the subsequent month.",
+                "fsp_resolution": "FSP = the value of the published monthly average of the LBMA Gold Price (PM) in USD for the month beginning {observation.reference_date} available at {observation.release_date}."
+            },
+            {
+                "condition": "The monthly average value for the month beginning {observation.reference_date} is not published via DBnomics.",
+                "fsp_resolution": "FSP = {oracle_fallback.fallback_fsp}, the most recent value available prior to the scheduled release date of {oracle_fallback.fallback_time}."
+            }
+        ],
+        "frequency": "monthly",
+        "units": "USD per troy ounce",
+        "source_name": "LBMA Gold Prices - monthly - US Dollar PM - Average",
+        "source_uri": "https://db.nomics.world/LBMA/gold_M/gold_M_USD_PM_AVG",
+        "history_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.db.nomics.world/v22/series/LBMA/gold_M/gold_M_USD_PM_AVG?observations=true",
+            "date_path": "$.series.docs[0].period_start_day",
+            "value_path": "$.series.docs[0].value",
+            "headers": null,
+            "timezone": "UTC",
+            "date_format_type": "iso_8601",
+            "auth_param_name": null,
+            "auth_param_location": null
+        }
+    },
+    "outcome_point": {
+        "fsp_type": "scalar",
+        "observation": {
+            "reference_date": "2026-03-01",
+            "release_date": "2026-04-05"
+        }
+    },
+    "oracle_config": {
+        "description": "Prototype1 oracle configuration for CPI-U data retrieval from FRED API",
+        "project_url": "https://github.com/example/oracle-prototype1",
+        "evaluation_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.db.nomics.world/v22/series/LBMA/gold_M/gold_M_USD_PM_AVG?observations=true",
+            "date_path": "$.series.docs[0].period[-1]",
+            "value_path": "$.series.docs[0].value[-1]",
+            "headers": null,
+            "timezone": "UTC",
+            "date_format_type": "iso_8601",
+            "auth_param_name": null,
+            "auth_param_location": null
+        }
+    },
+    "oracle_fallback": {
+        "fallback_fsp": "4685.45",
+        "fallback_time": "2026-04-16T16:00:00Z"
+    }
+}
