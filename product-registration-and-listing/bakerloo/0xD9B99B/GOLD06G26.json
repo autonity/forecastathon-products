@@ -40,7 +40,7 @@
             },
             {
                 "condition": "The daily average value is not published via DBnomics for the week beginning {observation.reference_date}.",
-                "fsp_resolution": "FSP = {oracle_fallback.fallback_fsp}, the most recent value available before {observation.reference_date}."
+                "fsp_resolution": "FSP = the most recent value available prior to {observation.release_date}."
             }
         ],
         "frequency": "daily",
