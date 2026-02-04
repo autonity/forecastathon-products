@@ -23,8 +23,8 @@
             "earliestFSPSubmissionTime": "2026-02-06T16:00:00Z",
             "tradeoutInterval": 3600
         },
-        "minPrice": "4500.00",
-        "maxPrice": "5500.00"
+        "minPrice": "4000.00",
+        "maxPrice": "6000.00"
     },
     "outcome_space": {
         "fsp_type": "scalar",
@@ -82,7 +82,7 @@
         }
     },
     "oracle_fallback": {
-        "fallback_fsp": "5063.45",
+        "fallback_fsp": "4920.00",
         "fallback_time": "2026-02-13T16:00:00Z"
     }
 }
