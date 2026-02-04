@@ -45,6 +45,7 @@ from decimal import Decimal
 import afp
 import psycopg2
 from afp.exceptions import IPFSError, NotFoundError, ValidationError
+from web3 import Web3
 
 # Minimum working days required between PR submission and product start time
 MIN_WORKING_DAYS_BEFORE_START = 2
@@ -164,6 +165,64 @@ def check_builder_registered(builder_address: str) -> bool:
 
     except psycopg2.Error as e:
         raise RuntimeError(f"Database error: {e}")
+
+
+# Standard ERC20 ABI for balanceOf and decimals
+ERC20_ABI = [
+    {
+        "constant": True,
+        "inputs": [{"name": "_owner", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "balance", "type": "uint256"}],
+        "type": "function",
+    },
+    {
+        "constant": True,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [{"name": "", "type": "uint8"}],
+        "type": "function",
+    },
+]
+
+
+def check_collateral_balance(
+    rpc_url: str,
+    collateral_address: str,
+    builder_address: str,
+    required_amount: Decimal,
+) -> tuple[bool, Decimal, int]:
+    """
+    Check if the builder has sufficient collateral balance.
+
+    Args:
+        rpc_url: The RPC URL for the network
+        collateral_address: The ERC20 collateral token address
+        builder_address: The builder's wallet address
+        required_amount: The required amount (in token units, not wei)
+
+    Returns:
+        Tuple of (has_sufficient_balance, actual_balance, decimals)
+    """
+    w3 = Web3(Web3.HTTPProvider(rpc_url))
+
+    collateral_contract = w3.eth.contract(
+        address=Web3.to_checksum_address(collateral_address),
+        abi=ERC20_ABI,
+    )
+
+    # Get token decimals
+    decimals = collateral_contract.functions.decimals().call()
+
+    # Get balance in wei
+    balance_wei = collateral_contract.functions.balanceOf(
+        Web3.to_checksum_address(builder_address)
+    ).call()
+
+    # Convert to token units
+    actual_balance = Decimal(balance_wei) / Decimal(10**decimals)
+
+    return actual_balance >= required_amount, actual_balance, decimals
 
 
 def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
@@ -292,7 +351,51 @@ def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
         else:
             print("  Builder registration check: skipped (DB_* env vars not set)")
 
-        # 9. Output computed product ID for reference
+        # 9. Check builder has sufficient collateral balance for initial stake
+        #    (only for product-registration-and-listing path)
+        if "product-registration-and-listing" in json_file:
+            builder_address = specification.product.base.metadata.builder
+            collateral_address = specification.product.base.collateral_asset
+            stake_amount = initial_builder_stake if initial_builder_stake_str is not None else Decimal(0)
+
+            if stake_amount > 0:
+                print(f"  Checking collateral balance for initial stake...")
+                print(f"    Builder: {builder_address}")
+                print(f"    Collateral asset: {collateral_address}")
+                print(f"    Required stake: {stake_amount}")
+
+                try:
+                    has_balance, actual_balance, decimals = check_collateral_balance(
+                        rpc_url, collateral_address, builder_address, stake_amount
+                    )
+
+                    if not has_balance:
+                        print(
+                            f"Error: Builder has insufficient collateral balance",
+                            file=sys.stderr,
+                        )
+                        print(f"  Required: {stake_amount}", file=sys.stderr)
+                        print(f"  Available: {actual_balance}", file=sys.stderr)
+                        print("", file=sys.stderr)
+                        print(
+                            "Please ensure the builder address has sufficient collateral "
+                            "before submitting the product for registration.",
+                            file=sys.stderr,
+                        )
+                        sys.exit(1)
+
+                    print(f"    Available balance: {actual_balance}")
+                    print(f"  Collateral balance check: {actual_balance} >= {stake_amount} ✓")
+                except Exception as e:
+                    print(
+                        f"Error: Could not verify collateral balance: {e}",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+            else:
+                print("  Collateral balance check: skipped (initial_builder_stake is 0)")
+
+        # 10. Output computed product ID for reference
         product_id = product_api.id(specification)
         print("Validation successful!")
         print(f"  Product symbol: {specification.product.base.metadata.symbol}")
