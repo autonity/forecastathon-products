@@ -45,7 +45,6 @@ from decimal import Decimal
 import afp
 import psycopg2
 from afp.exceptions import IPFSError, NotFoundError, ValidationError
-from web3 import Web3
 
 # Minimum working days required between PR submission and product start time
 MIN_WORKING_DAYS_BEFORE_START = 2
@@ -167,62 +166,32 @@ def check_builder_registered(builder_address: str) -> bool:
         raise RuntimeError(f"Database error: {e}")
 
 
-# Standard ERC20 ABI for balanceOf and decimals
-ERC20_ABI = [
-    {
-        "constant": True,
-        "inputs": [{"name": "_owner", "type": "address"}],
-        "name": "balanceOf",
-        "outputs": [{"name": "balance", "type": "uint256"}],
-        "type": "function",
-    },
-    {
-        "constant": True,
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [{"name": "", "type": "uint8"}],
-        "type": "function",
-    },
-]
-
-
-def check_collateral_balance(
-    rpc_url: str,
+def check_margin_capital(
+    margin_api: "afp.api.margin_account.MarginAccount",
     collateral_address: str,
     builder_address: str,
     required_amount: Decimal,
-) -> tuple[bool, Decimal, int]:
+) -> tuple[bool, Decimal]:
     """
-    Check if the builder has sufficient collateral balance.
+    Check if the builder has sufficient capital deposited in their margin account.
 
     Args:
-        rpc_url: The RPC URL for the network
-        collateral_address: The ERC20 collateral token address
+        margin_api: The AFP MarginAccount API instance
+        collateral_address: The collateral token address
         builder_address: The builder's wallet address
-        required_amount: The required amount (in token units, not wei)
+        required_amount: The required amount (in token units)
 
     Returns:
-        Tuple of (has_sufficient_balance, actual_balance, decimals)
+        Tuple of (has_sufficient_capital, actual_capital)
     """
-    w3 = Web3(Web3.HTTPProvider(rpc_url))
+    margin_contract = margin_api._margin_contract(collateral_address)
+    decimals = margin_api._decimals(collateral_address)
 
-    collateral_contract = w3.eth.contract(
-        address=Web3.to_checksum_address(collateral_address),
-        abi=ERC20_ABI,
-    )
+    # Get capital deposited in margin account
+    raw_capital = margin_contract.capital(builder_address)
+    actual_capital = Decimal(raw_capital) / Decimal(10**decimals)
 
-    # Get token decimals
-    decimals = collateral_contract.functions.decimals().call()
-
-    # Get balance in wei
-    balance_wei = collateral_contract.functions.balanceOf(
-        Web3.to_checksum_address(builder_address)
-    ).call()
-
-    # Convert to token units
-    actual_balance = Decimal(balance_wei) / Decimal(10**decimals)
-
-    return actual_balance >= required_amount, actual_balance, decimals
+    return actual_capital >= required_amount, actual_capital
 
 
 def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
@@ -359,41 +328,42 @@ def validate_spec(json_file: str, rpc_url: str, private_key: str) -> None:
             stake_amount = initial_builder_stake if initial_builder_stake_str is not None else Decimal(0)
 
             if stake_amount > 0:
-                print(f"  Checking collateral balance for initial stake...")
+                print(f"  Checking margin account capital for initial stake...")
                 print(f"    Builder: {builder_address}")
                 print(f"    Collateral asset: {collateral_address}")
                 print(f"    Required stake: {stake_amount}")
 
                 try:
-                    has_balance, actual_balance, decimals = check_collateral_balance(
-                        rpc_url, collateral_address, builder_address, stake_amount
+                    margin_api = app.MarginAccount()
+                    has_capital, actual_capital = check_margin_capital(
+                        margin_api, collateral_address, builder_address, stake_amount
                     )
 
-                    if not has_balance:
+                    if not has_capital:
                         print(
-                            f"Error: Builder has insufficient collateral balance",
+                            f"Error: Builder has insufficient margin account capital",
                             file=sys.stderr,
                         )
                         print(f"  Required: {stake_amount}", file=sys.stderr)
-                        print(f"  Available: {actual_balance}", file=sys.stderr)
+                        print(f"  Deposited: {actual_capital}", file=sys.stderr)
                         print("", file=sys.stderr)
                         print(
-                            "Please ensure the builder address has sufficient collateral "
+                            "Please deposit sufficient collateral into your margin account "
                             "before submitting the product for registration.",
                             file=sys.stderr,
                         )
                         sys.exit(1)
 
-                    print(f"    Available balance: {actual_balance}")
-                    print(f"  Collateral balance check: {actual_balance} >= {stake_amount} ✓")
+                    print(f"    Deposited capital: {actual_capital}")
+                    print(f"  Margin capital check: {actual_capital} >= {stake_amount} ✓")
                 except Exception as e:
                     print(
-                        f"Error: Could not verify collateral balance: {e}",
+                        f"Error: Could not verify margin account capital: {e}",
                         file=sys.stderr,
                     )
                     sys.exit(1)
             else:
-                print("  Collateral balance check: skipped (initial_builder_stake is 0)")
+                print("  Margin capital check: skipped (initial_builder_stake is 0)")
 
         # 10. Output computed product ID for reference
         product_id = product_api.id(specification)
