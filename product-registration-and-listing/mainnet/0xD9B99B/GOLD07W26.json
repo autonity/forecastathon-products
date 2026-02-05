@@ -1,0 +1,88 @@
+{
+    "product": {
+        "base": {
+            "metadata": {
+                "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
+                "symbol": "GOLD07W26",
+                "description": "LBMA Gold Prices - US Dollar - PM | Week 7 | 2026"
+            },
+            "oracleSpec": {
+                "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+                "fsvDecimals": 2,
+                "fspAlpha": "1",
+                "fspBeta": "0",
+                "fsvCalldata": "0x"
+            },
+            "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+            "startTime": "2026-02-09T00:00:00Z",
+            "pointValue": "0.001",
+            "priceDecimals": 2,
+            "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+        },
+        "expirySpec": {
+            "earliestFSPSubmissionTime": "2026-02-13T16:00:00Z",
+            "tradeoutInterval": 3600
+        },
+        "minPrice": "4000.00",
+        "maxPrice": "6000.00"
+    },
+    "outcome_space": {
+        "fsp_type": "scalar",
+        "description": "LBMA Gold Price (PM, USD) — weekly (Friday)",
+        "base_case": {
+            "condition": "What will be the published daily LBMA Gold Price (PM) in USD, as published via DBnomics for {observation.release_date}?",
+            "fsp_resolution": "FSP equals the daily LBMA Gold Price (PM) in USD for {observation.release_date}, as published via the DBnomics Series ID [gold_D_USD_PM] for the week beginning {observation.reference_date}. Settlement occurs at the end of the reference period, once the daily price value is published. The data for the Series is available by direct download from the DBnomics website page and via the DBnomics API (Docs: https://docs.db.nomics.world/)."
+        },
+        "edge_cases": [
+            {
+                "condition": "The daily price value for {observation.release_date} is not published.",
+                "fsp_resolution": "FSP = the most recent price value available for the week beginning {observation.reference_date} prior to {observation.release_date}."
+            },
+            {
+                "condition": "The daily price value is not published via DBnomics for the week beginning {observation.reference_date}.",
+                "fsp_resolution": "FSP = the most recent price value available prior to {observation.release_date}."
+            }
+        ],
+        "frequency": "weekly",
+        "units": "USD per troy ounce",
+        "source_name": "LBMA Gold Prices - daily - US Dollar - PM",
+        "source_uri": "https://db.nomics.world/LBMA/gold_D/gold_D_USD_PM",
+        "history_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.db.nomics.world/v22/series/LBMA/gold_D/gold_D_USD_PM?observations=true",
+            "date_path": "$.series.docs[0].period",
+            "value_path": "$.series.docs[0].value",
+            "headers": null,
+            "timezone": "UTC",
+            "date_format_type": "iso_8601",
+            "auth_param_name": null,
+            "auth_param_location": "none"
+        }
+    },
+    "outcome_point": {
+        "fsp_type": "scalar",
+        "observation": {
+            "reference_date": "2026-02-09",
+            "release_date": "2026-02-13"
+        }
+    },
+    "oracle_config": {
+        "description": "Prototype1 oracle configuration for LBMA gold, data retrieval from DBnomics",
+        "project_url": "https://github.com/example/oracle-prototype1",
+        "evaluation_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.db.nomics.world/v22/series/LBMA/gold_D/gold_D_USD_PM?observations=true",
+            "date_path": "$.series.docs[0].period",
+            "value_path": "$.series.docs[0].value",
+            "headers": null,
+            "timezone": "UTC",
+            "date_format_type": "iso_8601",
+            "auth_param_name": null,
+            "auth_param_location": "none"
+        }
+    },
+    "oracle_fallback": {
+        "fallback_fsp": "4923.65",
+        "fallback_time": "2026-02-20T16:00:00Z"
+    }
+}
