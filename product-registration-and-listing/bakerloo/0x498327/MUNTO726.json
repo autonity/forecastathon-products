@@ -1,0 +1,59 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0x49832769Bc97A9fFb9Aa1F6F9c51Ff16CAD62Ee0",
+        "symbol": "MUNTO726",
+        "description": "Manchester United vs Tottenham Hotspur match result for 7 February 2026"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
+        "fsvDecimals": 0,
+        "fspAlpha": "1.0",
+        "fspBeta": "0.0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5",
+      "startTime": "2026-02-05T18:00:00Z",
+      "pointValue": "1",
+      "priceDecimals": 2,
+      "extendedMetadata": "bafyreiappalvrq5sxdwpyk5yqzh3rh6bycfubamh4sfuxwv3ybhi64t47m"
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-02-07T15:00:00Z",
+      "tradeoutInterval": 3600
+    },
+    "minPrice": "0",
+    "maxPrice": "1"
+  },
+  "outcome_space": {
+    "fsp_type": "ternary",
+    "description": "Manchester United vs Tottenham Hotspur Premier League match result (7 February 2026)",
+    "base_case": {
+      "condition": "What is the full-time result of {outcome}?",
+      "fsp_resolution": "FSP=1.0 if Manchester United wins (home victory), FSP=0.5 if the match ends in a draw or is cancelled/abandoned with no official result adjudicated, FSP=0.0 if Tottenham Hotspur wins (away victory). Result is determined by the final score at full-time (90 minutes + stoppage time). Data sources: Primary <https://www.premierleague.com/en/match/2562142/manchester-united-vs-tottenham-hotspur/overview>; Secondary <https://www.espn.com/soccer/report/_/gameId/740843>."
+    },
+    "edge_cases": [
+      {
+        "condition": "Match is postponed, abandoned, or cancelled with no official result adjudicated",
+        "fsp_resolution": "FSP=0.5 (evaluates to UNRESOLVED) - there is no formally adjudicated match result. Data sources: Primary <https://www.premierleague.com/en/match/2562142/manchester-united-vs-tottenham-hotspur/overview>; Secondary <https://www.espn.com/soccer/report/_/gameId/740843>."
+      },
+      {
+        "condition": "Official result cannot be verified from primary or secondary data sources within 48 hours after scheduled kick-off",
+        "fsp_resolution": "FSP=0.5 (evaluates to UNRESOLVED) - oracle cannot verify official match result from specified data sources within the required timeframe."
+      }
+    ]
+  },
+  "outcome_point": {
+    "fsp_type": "ternary",
+    "outcome": "Manchester United vs Tottenham Hotspur on 7 February 2026"
+  },
+  "oracle_config": {
+    "description": "Manual oracle system for product settlement based on official Premier League match result",
+    "project_url": "https://www.premierleague.com/en/match/2562142/manchester-united-vs-tottenham-hotspur/overview"
+  },
+  "oracle_fallback": {
+    "fallback_time": "2026-02-14T15:00:00Z",
+    "fallback_fsp": "0.5"
+  }
+}
