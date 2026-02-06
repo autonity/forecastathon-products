@@ -1,0 +1,88 @@
+{
+    "product": {
+        "base": {
+            "metadata": {
+                "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
+                "symbol": "NFPH26",
+                "description": "US Total Nonfarm Employment | Value 02/26 | March 2026 Release"
+            },
+            "oracleSpec": {
+                "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
+                "fsvDecimals": 0,
+                "fspAlpha": "0.001",
+                "fspBeta": "0.0",
+                "fsvCalldata": "0x"
+            },
+            "collateralAsset": "0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5",
+            "startTime": "2026-02-09T15:00:00Z",
+            "pointValue": "0.5",
+            "priceDecimals": 3,
+            "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+        },
+        "expirySpec": {
+            "earliestFSPSubmissionTime": "2026-03-06T13:30:00Z",
+            "tradeoutInterval": 3600
+        },
+        "minPrice": "155.000",
+        "maxPrice": "165.000"
+    },
+    "outcome_space": {
+        "fsp_type": "scalar",
+        "description": "US Total Nonfarm Employment (Thousands, Seasonally Adjusted)",
+        "base_case": {
+            "condition": "What will the US Total Nonfarm Employment be for {observation.reference_date}?",
+            "fsp_resolution": "FSP equals the total number of paid employees working in the United States (in thousands), excluding farm workers, private household employees, and non-profit organization employees, for the month of {observation.reference_date}, as reported by the U.S. Bureau of Labor Statistics in the Employment Situation report released on {observation.release_date}. Employment values are scaled by 0.001 (e.g., 159,500 thousand employees reported by FRED settles as FSP = 159.500). This data is available via the FRED API (Series ID: PAYEMS)."
+        },
+        "edge_cases": [
+            {
+                "condition": "The U.S. Bureau of Labor Statistics announces that it cannot produce the Total Nonfarm Employment number for {observation.reference_date} due to exceptional circumstances (such as government shutdown) but provides an alternative estimate or proxy value.",
+                "fsp_resolution": "FSP = the alternative estimate or proxy value provided by the U.S. Bureau of Labor Statistics, scaled by 0.001."
+            },
+            {
+                "condition": "The U.S. Bureau of Labor Statistics announces that it cannot produce the Total Nonfarm Employment number for {observation.reference_date} due to exceptional circumstances and will not publish one for this period.",
+                "fsp_resolution": "FSP = oracle_fallback.fallback_fsp, the most recent Total Nonfarm Employment rate available prior to the scheduled release date of {observation.release_date}."
+            }
+        ],
+        "frequency": "monthly",
+        "units": "Thousands (scaled by 0.001)",
+        "source_name": "U.S. Bureau of Labor Statistics",
+        "source_uri": "https://fred.stlouisfed.org/series/PAYEMS",
+        "history_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.stlouisfed.org/fred/series/observations?series_id=PAYEMS&file_type=json",
+            "date_path": "$.observations[*].date",
+            "value_path": "$.observations[*].value",
+            "headers": null,
+            "timezone": "America/New_York",
+            "date_format_type": "iso_8601",
+            "auth_param_name": "api_key",
+            "auth_param_location": "query"
+        }
+    },
+    "outcome_point": {
+        "fsp_type": "scalar",
+        "observation": {
+            "reference_date": "2026-02-01",
+            "release_date": "2026-03-06"
+        }
+    },
+    "oracle_config": {
+        "description": "Prototype1 oracle configuration for Total Nonfarm Employment data retrieval from FRED API",
+        "project_url": "https://github.com/example/oracle-prototype1",
+        "evaluation_api_spec": {
+            "standard": "JSONPath",
+            "url": "https://api.stlouisfed.org/fred/series/observations?series_id=PAYEMS&file_type=json",
+            "date_path": "$.observations[?(@.date=='2026-01-01')].date",
+            "value_path": "$.observations[?(@.date=='2026-01-01')].value",
+            "headers": null,
+            "timezone": "America/New_York",
+            "date_format_type": "iso_8601",
+            "auth_param_name": "api_key",
+            "auth_param_location": "query"
+        }
+    },
+    "oracle_fallback": {
+        "fallback_fsp": "159.500",
+        "fallback_time": "2026-06-07T13:30:00Z"
+    }
+}
