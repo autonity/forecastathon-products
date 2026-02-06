@@ -175,6 +175,10 @@ jobs:
               python scripts/list_product.py "$PRODUCT_ID"
 
               echo "Product $PRODUCT_ID registered and listed successfully"
+
+              # Wait for nonce to propagate before processing next product
+              echo "Waiting for transaction propagation..."
+              sleep 5
             fi
           done <<< "${{ needs.detect-environment.outputs.changed_files }}"
 

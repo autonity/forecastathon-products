@@ -9,12 +9,17 @@ Environment variables required:
     AUTONITY_RPC_URL: The RPC URL for the network
     EXCHANGE_URL: The exchange server URL
     EXCHANGE_ADMIN_KEY: The private key for authentication
+
+Exit codes:
+    0: Success (product listed/revealed, or already listed/revealed)
+    1: Error
 """
 
 import os
 import sys
 
 import afp
+from afp.exceptions import ValidationError
 
 
 def main():
@@ -53,13 +58,39 @@ def main():
 
     admin = app.Admin()
 
+    # List product (handle already listed case)
     print(f"Listing product: {product_id}")
-    admin.list_product(product_id)
-    print("Product listed successfully")
+    try:
+        admin.list_product(product_id)
+        print("Product listed successfully")
+    except ValidationError as e:
+        error_msg = str(e).lower()
+        if "already listed" in error_msg:
+            print("Product already listed, skipping")
+        else:
+            print(f"Error listing product: {e}", file=sys.stderr)
+            sys.exit(1)
+    except Exception as e:
+        print(f"Error listing product: {e}", file=sys.stderr)
+        sys.exit(1)
 
+    # Reveal product (handle already revealed case)
     print(f"Revealing product: {product_id}")
-    admin.reveal_product(product_id)
-    print("Product revealed successfully")
+    try:
+        admin.reveal_product(product_id)
+        print("Product revealed successfully")
+    except ValidationError as e:
+        error_msg = str(e).lower()
+        if "already revealed" in error_msg:
+            print("Product already revealed, skipping")
+        else:
+            print(f"Error revealing product: {e}", file=sys.stderr)
+            sys.exit(1)
+    except Exception as e:
+        print(f"Error revealing product: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"Product {product_id} listing complete")
 
 
 if __name__ == "__main__":
