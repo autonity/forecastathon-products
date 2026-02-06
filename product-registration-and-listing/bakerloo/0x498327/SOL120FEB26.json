@@ -20,7 +20,7 @@
       "extendedMetadata": "bafyreih7mzv6xkaohm7bfpm5b26qt2gsucdan2ojejovmut753fexqwd7u"
     },
     "expirySpec": {
-      "earliestFSPSubmissionTime": "2026-02-16T01:00:00Z",
+      "earliestFSPSubmissionTime": "2026-02-16T00:15:00Z",
       "tradeoutInterval": 3600
     },
     "minPrice": "0",
