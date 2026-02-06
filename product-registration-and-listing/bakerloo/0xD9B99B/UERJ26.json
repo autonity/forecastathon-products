@@ -40,7 +40,7 @@
             },
             {
                 "condition": "The U.S. Bureau of Labor Statistics announces that it cannot produce the unemployment rate for {observation.reference_date} due to exceptional circumstances and will not publish one for this period.",
-                "fsp_resolution": "FSP = {oracle_fallback.fallback_fsp}, the most recent unemployment rate available prior to the scheduled release date of {observation.release_date}."
+                "fsp_resolution": "FSP = oracle_fallback.fallback_fsp, the most recent unemployment rate available prior to the scheduled release date of {observation.release_date}."
             }
         ],
         "frequency": "monthly",
