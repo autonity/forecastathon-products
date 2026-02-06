@@ -36,7 +36,7 @@
     "edge_cases": [
       {
         "condition": "If CoinGecko returns zero price samples in the observation window.",
-        "fsp_resolution": "Mark FSP as UNRESOLVED and allow oracle_fallback to trigger."
+        "fsp_resolution": "FSP = oracle_fallback.fallback_fsp."
       }
     ]
   },
