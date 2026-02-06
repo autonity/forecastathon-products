@@ -1,0 +1,73 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0x49832769Bc97A9fFb9Aa1F6F9c51Ff16CAD62Ee0",
+        "symbol": "SOL120FEB26",
+        "description": "Will Solana touch or exceed $120.00 on 2026-02-15 (UTC) based on CoinGecko?"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
+        "fsvDecimals": 2,
+        "fspAlpha": "1",
+        "fspBeta": "0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5",
+      "startTime": "2026-02-08T00:00:00Z",
+      "pointValue": "1",
+      "priceDecimals": 2,
+      "extendedMetadata": "bafyreicdg3ormfvdledjnrue2zibowljeznkf3mvkh6zmh327a54hnfr3i"
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-02-16T00:15:00Z",
+      "tradeoutInterval": 3600
+    },
+    "minPrice": "0",
+    "maxPrice": "1"
+  },
+  "outcome_space": {
+    "fsp_type": "binary",
+    "description": "Whether Solana USD will reach or exceed $120.00 at any time during 2026-02-15 UTC, using CoinGecko USD price samples.",
+    "base_case": {
+      "condition": "Let P be the set of all USD price samples returned by CoinGecko at $.prices[*][1] within the UTC window [2026-02-15T00:00:00Z, 2026-02-16T00:00:00Z) (start inclusive, end exclusive). Let M = max(P). Truncate M to 2 decimal places. If truncated M >= 120.00, resolve YES.",
+      "fsp_resolution": "FSP = 1 if {outcome} is true. FSP = 0 if {outcome} is false."
+    },
+    "edge_cases": [
+      {
+        "condition": "If CoinGecko returns zero price samples in the observation window.",
+        "fsp_resolution": "FSP = oracle_fallback.fallback_fsp."
+      }
+    ]
+  },
+  "outcome_point": {
+    "fsp_type": "binary",
+    "outcome": "Truncated max sample of Solana Price reported by CoinGecko is >= 120.00 USD."
+  },
+  "oracle_config": {
+    "description": "Automated oracle: fetch Solana USD prices from CoinGecko over a fixed 24h UTC window, compute max over returned samples, truncate to 2 decimals, then compare against 120.00.",
+    "project_url": "https://www.coingecko.com/en/coins/solana",
+    "evaluation_api_spec": {
+      "standard": "JSONPath",
+      "spec_variant": "product-fsv",
+      "url": "https://api.coingecko.com/api/v3/coins/solana/market_chart/range?vs_currency=usd&from=1771113600&to=1771200000",
+      "date_path": "$.prices[*][0]",
+      "value_path": "$.prices[*][1]",
+      "auth_param_location": "none",
+      "auth_param_name": null,
+      "auth_param_prefix": null,
+      "continuation_token_param": null,
+      "continuation_token_path": null,
+      "date_format_custom": null,
+      "date_format_type": "unix_timestamp",
+      "headers": null,
+      "max_pages": 10,
+      "timestamp_scale": 1000,
+      "timezone": "UTC"
+    }
+  },
+  "oracle_fallback": {
+    "fallback_time": "2026-02-23T02:00:00Z",
+    "fallback_fsp": "0"
+  }
+}
