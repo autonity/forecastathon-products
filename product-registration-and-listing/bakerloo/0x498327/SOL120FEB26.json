@@ -17,7 +17,7 @@
       "startTime": "2026-02-08T00:00:00Z",
       "pointValue": "1",
       "priceDecimals": 2,
-      "extendedMetadata": "bafyreih7mzv6xkaohm7bfpm5b26qt2gsucdan2ojejovmut753fexqwd7u"
+      "extendedMetadata": "bafyreid7gq7fa64w5xtihpg2pxfq6eqzg77a4ulnwgkb7an6rb6nxd4agi"
     },
     "expirySpec": {
       "earliestFSPSubmissionTime": "2026-02-16T00:15:00Z",
@@ -31,7 +31,7 @@
     "description": "Whether Solana USD will reach or exceed $120.00 at any time during 2026-02-15 UTC, using CoinGecko USD price samples.",
     "base_case": {
       "condition": "Let P be the set of all USD price samples returned by CoinGecko at $.prices[*][1] within the UTC window [2026-02-15T00:00:00Z, 2026-02-16T00:00:00Z) (start inclusive, end exclusive). Let M = max(P). Truncate M to 2 decimal places. If truncated M >= 120.00, resolve YES.",
-      "fsp_resolution": "FSP = 1 if {outcome} is true. FSP = 0 if {outcome} is false."
+      "fsp_resolution": "Resolve ${outcome} (1) if truncated max sample >= 120.00 USD. Otherwise resolve NO (0)."
     },
     "edge_cases": [
       {
