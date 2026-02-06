@@ -1,0 +1,75 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0x713676A89d2Fc5F5058EeF3E00B2796B8D2B1166",
+        "symbol": "ETHBFG26",
+        "description": "Ethereum BASEFEE contract-month avg (Gwei) Feb 2026"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x06CaDDDf6CC08048596aE051c8ce644725219C73",
+        "fsvDecimals": 0,
+        "fspAlpha": "0.000000001",
+        "fspBeta": "0.0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xAE2C6c29F6403fDf5A31e74CC8bFd1D75a3CcB8d",
+      "startTime": "2026-02-06T12:00:00Z",
+      "pointValue": "0.1",
+      "priceDecimals": 3,
+      "extendedMetadata": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-02-27T08:15:00Z",
+      "tradeoutInterval": 3600
+    },
+    "minPrice": "0.000",
+    "maxPrice": "15.000"
+  },
+  "outcome_space": {
+    "fsp_type": "scalar",
+    "description": "Ethereum EIP-1559 base fee per gas (BASEFEE), contract-month average",
+    "base_case": {
+      "condition": "What is the average Ethereum EIP-1559 BASEFEE (base fee per gas) for the contract month {observation.reference_date} (UTC), in Gwei?",
+      "fsp_resolution": "This is a contract-month average. The averaging window is from the previous monthly expiry to the current monthly expiry, where each expiry is 08:00:00 UTC on the last Friday of the month. FSP equals the arithmetic average of the Ethereum L1 block header field `baseFeePerGas` (Wei) across all blocks whose block timestamp is in the UTC interval [previous_expiry, current_expiry). The result is scaled to Gwei by dividing by 1e9 (Wei * 1e-9). Note: this product settles BASEFEE only (excludes priority fees/tips) and is USDC-settled (does not include the ETHUSD FX leg)."
+    },
+    "edge_cases": [
+      {
+        "condition": "The data source is unavailable, rate-limited, or returns no blocks for more than 48 hours after {observation.release_date}.",
+        "fsp_resolution": "FSP is UNRESOLVED (or fallback after fallback_time)."
+      }
+    ],
+    "frequency": "monthly",
+    "units": "Gwei",
+    "source_name": "Ethereum L1 block headers (via Blockchair API)",
+    "source_uri": "https://blockchair.com/api/docs"
+  },
+  "outcome_point": {
+    "fsp_type": "scalar",
+    "observation": {
+      "reference_date": "2026-02-01",
+      "release_date": "2026-02-27"
+    },
+    "_comment": "Feb 2026 contract-month average. Window: 2026-01-30T08:00:00Z to 2026-02-27T08:00:00Z."
+  },
+  "oracle_config": {
+    "description": "Oracle config: compute avg(base_fee_per_gas) over the contract-month window (Wei)",
+    "project_url": "https://blockchair.com/api/docs",
+    "evaluation_api_spec": {
+      "standard": "JSONPath",
+      "url": "https://api.blockchair.com/ethereum/blocks?q=time(2026-01-30%2008:00:00..2026-02-27%2008:00:00)&a=avg(base_fee_per_gas)",
+      "date_path": "$.context.cache.until",
+      "value_path": "$.data[0]['avg(base_fee_per_gas)']",
+      "headers": null,
+      "timezone": "UTC",
+      "date_format_type": "custom",
+      "date_format_custom": "%Y-%m-%d %H:%M:%S",
+      "auth_param_name": null,
+      "auth_param_location": "none"
+    }
+  },
+  "oracle_fallback": {
+    "fallback_fsp": "1.059",
+    "fallback_time": "2026-03-13T00:00:00Z"
+  }
+}
