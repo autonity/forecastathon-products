@@ -1,0 +1,73 @@
+{
+  "product": {
+    "base": {
+      "metadata": {
+        "builder": "0x49832769Bc97A9fFb9Aa1F6F9c51Ff16CAD62Ee0",
+        "symbol": "SOL120FEB26",
+        "description": "Will Solana touch or exceed $120.00 on 2026-02-15 (UTC) based on CoinGecko?"
+      },
+      "oracleSpec": {
+        "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
+        "fsvDecimals": 2,
+        "fspAlpha": "1",
+        "fspBeta": "0",
+        "fsvCalldata": "0x"
+      },
+      "collateralAsset": "0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5",
+      "startTime": "2026-02-08T00:00:00Z",
+      "pointValue": "0.001",
+      "priceDecimals": 2,
+      "extendedMetadata": "bafyreiapnznjjwfpys3i2glhgqj4qd3bk45ofkzlskywfhlofhhrgn3avi"
+    },
+    "expirySpec": {
+      "earliestFSPSubmissionTime": "2026-02-16T00:05:00Z",
+      "tradeoutInterval": 3600
+    },
+    "minPrice": "0",
+    "maxPrice": "1"
+  },
+  "outcome_space": {
+    "fsp_type": "binary",
+    "description": "Whether Solana USD will reach or exceed $120.00 at any time during 2026-02-15 UTC.",
+    "base_case": {
+      "condition": "If the maximum Solana USD price observed in the UTC window [2026-02-15T00:00:00Z, 2026-02-16T00:00:00Z) is >= 120.00.",
+      "fsp_resolution": "Resolve YES (1) if any sampled price >= 120.00 USD. Otherwise resolve NO (0)."
+    },
+    "edge_cases": [
+      {
+        "condition": "If CoinGecko returns no price samples in the observation window.",
+        "fsp_resolution": "Mark FSP as UNRESOLVED and allow oracle_fallback to trigger."
+      }
+    ]
+  },
+  "outcome_point": {
+    "fsp_type": "binary",
+    "outcome": "YES if >=120.00 USD on 2026-02-15 UTC, otherwise NO"
+  },
+  "oracle_config": {
+    "description": "Fetch Solana USD prices from CoinGecko over a fixed 24h UTC window and evaluate max(price) >= 120.00.",
+    "project_url": "https://www.coingecko.com/en/coins/solana",
+    "evaluation_api_spec": {
+      "standard": "JSONPath",
+      "spec_variant": "product-fsv",
+      "url": "https://api.coingecko.com/api/v3/coins/solana/market_chart/range?vs_currency=usd&from=1771113600&to=1771200000",
+      "date_path": "$.prices[*][0]",
+      "value_path": "$.prices[*][1]",
+      "auth_param_location": "none",
+      "auth_param_name": null,
+      "auth_param_prefix": null,
+      "continuation_token_param": null,
+      "continuation_token_path": null,
+      "date_format_custom": null,
+      "date_format_type": "unix_timestamp",
+      "headers": null,
+      "max_pages": 10,
+      "timestamp_scale": 1000,
+      "timezone": "UTC"
+    }
+  },
+  "oracle_fallback": {
+    "fallback_time": "2026-02-23T00:05:00Z",
+    "fallback_fsp": "0"
+  }
+}
