@@ -40,7 +40,7 @@
             },
             {
                 "condition": "The U.S. Department of Labor announces that it cannot produce the Initial Jobless Claims number for the week ending {observation.reference_date} due to exceptional circumstances and will not publish one for this period.",
-                "fsp_resolution": "FSP = {oracle_fallback.fallback_fsp}, the Initial Jobless Claims value from preceding week, {observation.reference_date} - 7days."
+                "fsp_resolution": "FSP = oracle_fallback.fallback_fsp, the Initial Jobless Claims value from preceding week, {observation.reference_date} - 7days."
             }
         ],
         "frequency": "weekly",
