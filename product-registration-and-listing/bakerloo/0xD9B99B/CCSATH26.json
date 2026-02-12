@@ -20,7 +20,7 @@
       "extendedMetadata": "bafkreihdwdcefgh4kdnjxwnxd43whjskfxuk4c5jtusp4gvu6k6kbbypwu"
     },
     "expirySpec": {
-      "earliestFSPSubmissionTime": "2026-03-06T12:00:00Z",
+      "earliestFSPSubmissionTime": "2026-03-03T12:00:00Z",
       "tradeoutInterval": 86400
     },
     "minPrice": "1.0",
@@ -48,7 +48,7 @@
     "fsp_type": "scalar",
     "observation": {
       "reference_date": "2026-02-28",
-      "release_date": "2026-03-16"
+      "release_date": "2026-03-03"
     }
   },
   "oracle_config": {
