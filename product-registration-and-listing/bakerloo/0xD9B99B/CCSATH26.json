@@ -8,7 +8,7 @@
       },
       "oracleSpec": {
         "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
-        "fsvDecimals": 4,
+        "fsvDecimals": 2,
         "fspAlpha": "1.0",
         "fspBeta": "0.0",
         "fsvCalldata": "0x"
