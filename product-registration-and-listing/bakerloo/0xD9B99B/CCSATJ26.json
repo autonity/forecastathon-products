@@ -8,7 +8,7 @@
       },
       "oracleSpec": {
         "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
-        "fsvDecimals": 4,
+        "fsvDecimals": 2,
         "fspAlpha": "1.0",
         "fspBeta": "0.0",
         "fsvCalldata": "0x"
@@ -30,7 +30,7 @@
     "fsp_type": "scalar",
     "description": "Global surface air temperature - Monthly",
     "base_case": {
-      "condition": "What will be the monthly global surface air temperature anomaly measured against pre-industrial levels (1850–1900) published by EU Copernicus Climate Change Service for month ending {observation.release_date}?",
+      "condition": "What will be the monthly global surface air temperature anomaly measured against pre-industrial levels (1850–1900) published by EU Copernicus Climate Change Service for month ending {observation.reference_date}?",
       "fsp_resolution": "FSP equals the global surface air temperature value for the reference period 1850-1900 representative of the pre-industrial level for month ending {observation.reference_date} as published by the EU Copernicus Climate Change Service in their 'Surface air temperature' monthly Climate bulletin. The 1850-1900 reference period is used by UN Climate Action <https://www.un.org/en/climatechange> for monitoring the approach of global temperature to the limits specified in the COP21 Paris Agreement of 2015. Primary sources: <https://climate.copernicus.eu/climate-bulletin> for month ending {observation.release_date}. Secondary sources: 'ERA5 monthly averaged data on single levels (C3S/ECMWF)' monthly <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means> and daily <https://sites.ecmwf.int/data/climatepulse/data/series/era5_daily_series_2t_global.csv> (daily); the Copernicus methodology for calculating the offset for the reference period 1850-1900 is described at <https://climate.copernicus.eu/climate-bulletin-about-data-and-analysis>."
     },
     "edge_cases": [
@@ -41,7 +41,7 @@
     ],
     "frequency": "monthly",
     "units": "Degrees Celsius (°C)",
-    "source_name": "Copernicus Climate bulletin, Surface air temperature for January 2026",
+    "source_name": "Copernicus Climate bulletin, Surface air temperature",
     "source_uri": "https://climate.copernicus.eu/climate-bulletin"
   },
   "outcome_point": {
