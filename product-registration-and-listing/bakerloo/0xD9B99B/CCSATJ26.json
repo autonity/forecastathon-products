@@ -3,8 +3,8 @@
     "base": {
       "metadata": {
         "builder": "0xD9B99BAe9E9550A6Ac2F74bA7DdE483a4462C548",
-        "symbol": "CCSATH26",
-        "description": "Climate change - surface air temperature | Value 02/26 | March 2026 Release"
+        "symbol": "CCSATJ26",
+        "description": "Climate change - surface air temperature | Value 03/26 | April 2026 Release"
       },
       "oracleSpec": {
         "oracleAddress": "0x72EeD9f7286292f119089F56e3068a3A931FCD49",
@@ -14,13 +14,13 @@
         "fsvCalldata": "0x"
       },
       "collateralAsset": "0xDEfAaC81a079533Bf2fb004c613cc2870cF0A5b5",
-      "startTime": "2026-02-16T15:00:00Z",
+      "startTime": "2026-03-01T00:00:00Z",
       "pointValue": "1.0",
       "priceDecimals": 2,
       "extendedMetadata": "bafkreihdwdcefgh4kdnjxwnxd43whjskfxuk4c5jtusp4gvu6k6kbbypwu"
     },
     "expirySpec": {
-      "earliestFSPSubmissionTime": "2026-03-06T12:00:00Z",
+      "earliestFSPSubmissionTime": "2026-04-03T12:00:00Z",
       "tradeoutInterval": 86400
     },
     "minPrice": "1.0",
@@ -47,8 +47,8 @@
   "outcome_point": {
     "fsp_type": "scalar",
     "observation": {
-      "reference_date": "2026-02-28",
-      "release_date": "2026-03-06"
+      "reference_date": "2026-03-31",
+      "release_date": "2026-04-03"
     }
   },
   "oracle_config": {
@@ -56,7 +56,7 @@
     "project_url": null
   },
   "oracle_fallback": {
-    "fallback_time": "2026-04-17T12:00:00Z",
+    "fallback_time": "2026-05-17T12:00:00Z",
     "fallback_fsp": "1.47"
   }
 }
